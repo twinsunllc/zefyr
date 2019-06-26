@@ -192,9 +192,15 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
       if (node.hasEmbed) {
         return new RawZefyrLine(node: node);
       } else if (node.style.contains(NotusAttribute.heading)) {
-        return new ZefyrHeading(node: node);
+        if (node.style.contains(NotusAttribute.alignment)) {
+          return ZefyrHeading(node: node, textAlign: _getTextAlign(node.style),);
+        }
+        return new ZefyrHeading(node: node, textAlign: TextAlign.start,);
       }
-      return new ZefyrParagraph(node: node);
+      if (node.style.contains(NotusAttribute.alignment)) {
+        return ZefyrParagraph(node: node, textAlign: _getTextAlign(node.style),);
+      }
+      return new ZefyrParagraph(node: node, textAlign: TextAlign.start,);
     }
 
     final BlockNode block = node;
@@ -203,6 +209,8 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
       return new ZefyrCode(node: block);
     } else if (blockStyle == NotusAttribute.block.bulletList) {
       return new ZefyrList(node: block);
+    }  else if (blockStyle == NotusAttribute.block.checklist) {
+      return new ZefyrList(node: block);
     } else if (blockStyle == NotusAttribute.block.numberList) {
       return new ZefyrList(node: block);
     } else if (blockStyle == NotusAttribute.block.quote) {
@@ -210,6 +218,19 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
     }
 
     throw new UnimplementedError('Block format $blockStyle.');
+  }
+
+  TextAlign _getTextAlign(NotusStyle style) {
+    if (_doesContainAttribute(style, NotusAttribute.alignment.ac)) {
+      return TextAlign.center;
+    } else if (_doesContainAttribute(style, NotusAttribute.alignment.ar)) {
+      return TextAlign.right;
+    }
+    return TextAlign.start;
+  }
+
+  bool _doesContainAttribute(NotusStyle style, NotusAttribute attribute) {
+    return style.single.value == attribute.value;
   }
 
   void _updateSubscriptions([ZefyrEditableText oldWidget]) {

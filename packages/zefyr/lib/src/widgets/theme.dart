@@ -54,6 +54,7 @@ class ZefyrTheme extends InheritedWidget {
 /// Holds colors and typography styles for [ZefyrEditor].
 class ZefyrThemeData {
   final TextStyle boldStyle;
+  final TextStyle underlineStyle;
   final TextStyle italicStyle;
   final TextStyle linkStyle;
   final StyleTheme paragraphTheme;
@@ -76,12 +77,14 @@ class ZefyrThemeData {
     );
     final padding = const EdgeInsets.only(bottom: 16.0);
     final boldStyle = new TextStyle(fontWeight: FontWeight.bold);
+    final underlineStyle = new TextStyle(decoration: TextDecoration.underline);
     final italicStyle = new TextStyle(fontStyle: FontStyle.italic);
     final linkStyle =
         TextStyle(color: Colors.blue, decoration: TextDecoration.underline);
 
     return new ZefyrThemeData(
       boldStyle: boldStyle,
+      underlineStyle: underlineStyle,
       italicStyle: italicStyle,
       linkStyle: linkStyle,
       paragraphTheme:
@@ -97,6 +100,7 @@ class ZefyrThemeData {
 
   const ZefyrThemeData({
     this.boldStyle,
+    this.underlineStyle,
     this.italicStyle,
     this.linkStyle,
     this.paragraphTheme,
@@ -111,6 +115,7 @@ class ZefyrThemeData {
   ZefyrThemeData copyWith({
     TextStyle textStyle,
     TextStyle boldStyle,
+    TextStyle underlineStyle,
     TextStyle italicStyle,
     TextStyle linkStyle,
     StyleTheme paragraphTheme,
@@ -123,6 +128,7 @@ class ZefyrThemeData {
   }) {
     return new ZefyrThemeData(
       boldStyle: boldStyle ?? this.boldStyle,
+      underlineStyle: underlineStyle ?? this.underlineStyle,
       italicStyle: italicStyle ?? this.italicStyle,
       linkStyle: linkStyle ?? this.linkStyle,
       paragraphTheme: paragraphTheme ?? this.paragraphTheme,
@@ -138,6 +144,7 @@ class ZefyrThemeData {
   ZefyrThemeData merge(ZefyrThemeData other) {
     return copyWith(
       boldStyle: other.boldStyle,
+      underlineStyle: other.underlineStyle,
       italicStyle: other.italicStyle,
       linkStyle: other.linkStyle,
       paragraphTheme: other.paragraphTheme,
@@ -207,6 +214,9 @@ class BlockTheme {
   /// Style theme for bullet lists.
   final StyleTheme bulletList;
 
+  /// Style theme for checklists.
+  final StyleTheme checklist;
+
   /// Style theme for number lists.
   final StyleTheme numberList;
 
@@ -218,6 +228,7 @@ class BlockTheme {
 
   BlockTheme({
     @required this.bulletList,
+    @required this.checklist,
     @required this.numberList,
     @required this.quote,
     @required this.code,
@@ -228,6 +239,7 @@ class BlockTheme {
     final padding = const EdgeInsets.only(bottom: 8.0);
     return new BlockTheme(
       bulletList: new StyleTheme(padding: padding),
+      checklist: new StyleTheme(padding: padding),
       numberList: new StyleTheme(padding: padding),
       quote: new StyleTheme(
         textStyle: new TextStyle(color: Colors.grey.shade700),

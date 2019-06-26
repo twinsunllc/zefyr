@@ -54,9 +54,10 @@ class ZefyrListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final BlockNode block = node.parent;
     final style = block.style.get(NotusAttribute.block);
+    final TextAlign textAlign = (node.style.contains(NotusAttribute.alignment)) ? _getTextAlign(node.style) : TextAlign.start;
     final theme = ZefyrTheme.of(context);
     final bulletText =
-        (style == NotusAttribute.block.bulletList) ? '•' : '$index.';
+        (style == NotusAttribute.block.bulletList) ? '•' : (style == NotusAttribute.block.numberList) ? '$index.' : '';
 
     TextStyle textStyle;
     Widget content;
@@ -66,21 +67,42 @@ class ZefyrListItem extends StatelessWidget {
       final headingTheme = ZefyrHeading.themeOf(node, context);
       textStyle = headingTheme.textStyle;
       padding = headingTheme.padding;
-      content = new ZefyrHeading(node: node);
+      content = new ZefyrHeading(node: node, textAlign: textAlign,);
     } else {
       textStyle = theme.paragraphTheme.textStyle;
-      content = new RawZefyrLine(node: node, style: textStyle);
+      content = new RawZefyrLine(node: node, style: textStyle, textAlign: textAlign);
     }
 
-    Widget bullet =
-        SizedBox(width: 24.0, child: Text(bulletText, style: textStyle));
+    Widget bullet = (style != NotusAttribute.block.checklist) ?
+        SizedBox(width: 24.0, child: Text(bulletText, style: textStyle)) : 
+        SizedBox(width: 24.0, child: Padding(
+          padding: const EdgeInsets.only(right: 12.0),
+          child: Checkbox(value: true, onChanged: (bool) {},),
+        ));
     if (padding != null) {
       bullet = Padding(padding: padding, child: bullet);
     }
 
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[bullet, Expanded(child: content)],
     );
+  }
+
+  TextAlign _getTextAlign(NotusStyle style) {
+    if (_doesContainAttribute(style, NotusAttribute.alignment.ac)) {
+      return TextAlign.center;
+    } else if (_doesContainAttribute(style, NotusAttribute.alignment.ar)) {
+      return TextAlign.right;
+    }
+    return TextAlign.start;
+  }
+
+  bool _doesContainAttribute(NotusStyle style, NotusAttribute attribute) {
+    if (style.containsSame(attribute)) {
+      return true;
+    }
+    return false;
   }
 }

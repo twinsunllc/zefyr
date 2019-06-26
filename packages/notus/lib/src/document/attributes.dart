@@ -69,12 +69,18 @@ abstract class NotusAttributeBuilder<T> implements NotusAttributeKey<T> {
 ///   * [NotusAttribute.link]
 ///   * [NotusAttribute.heading]
 ///   * [NotusAttribute.block]
+///   * [NotusAttribute.underline]
+///   * [NotusAttribute.alignright]
+///   * [NotusAttribute.alignleft]
+///   * [NotusAttribute.aligncenter]
 class NotusAttribute<T> implements NotusAttributeBuilder<T> {
   static final Map<String, NotusAttributeBuilder> _registry = {
     NotusAttribute.bold.key: NotusAttribute.bold,
+    NotusAttribute.underline.key: NotusAttribute.underline,
     NotusAttribute.italic.key: NotusAttribute.italic,
     NotusAttribute.link.key: NotusAttribute.link,
     NotusAttribute.heading.key: NotusAttribute.heading,
+    NotusAttribute.alignment.key: NotusAttribute.alignment,
     NotusAttribute.block.key: NotusAttribute.block,
     NotusAttribute.embed.key: NotusAttribute.embed,
   };
@@ -83,6 +89,9 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
 
   /// Bold style attribute.
   static const bold = const _BoldAttribute();
+
+  /// Underline style attribute.
+  static const underline = const _UnderlineAttribute();
 
   /// Italic style attribute.
   static const italic = const _ItalicAttribute();
@@ -104,11 +113,25 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
   /// Alias for [NotusAttribute.heading.level3].
   static NotusAttribute<int> get h3 => heading.level3;
 
+  static const alignment = const AlignmentAttributeBuilder._();
+
+  /// Alias for [NotusAttribute.alignment.ac].
+  static NotusAttribute<String> get ac => alignment.ac;
+
+  /// Alias for [NotusAttribute.attribute.ar].
+  static NotusAttribute<String> get ar => alignment.ar;
+
+  /// Alias for [NotusAttribute.attribute.al].
+  static NotusAttribute<String> get al => alignment.al;
+
   /// Block attribute
   static const block = const BlockAttributeBuilder._();
 
   /// Alias for [NotusAttribute.block.bulletList].
   static NotusAttribute<String> get ul => block.bulletList;
+
+  /// Alias for [NotusAttribute.block.checklist].
+  static NotusAttribute<String> get cl => block.checklist;
 
   /// Alias for [NotusAttribute.block.numberList].
   static NotusAttribute<String> get ol => block.numberList;
@@ -317,6 +340,11 @@ class _BoldAttribute extends NotusAttribute<bool> {
   const _BoldAttribute() : super._('b', NotusAttributeScope.inline, true);
 }
 
+/// Applies underline style to a text segment.
+class _UnderlineAttribute extends NotusAttribute<bool> {
+  const _UnderlineAttribute() : super._('u', NotusAttributeScope.inline, true);
+}
+
 /// Applies italic style to a text segment.
 class _ItalicAttribute extends NotusAttribute<bool> {
   const _ItalicAttribute() : super._('i', NotusAttributeScope.inline, true);
@@ -354,6 +382,21 @@ class HeadingAttributeBuilder extends NotusAttributeBuilder<int> {
   NotusAttribute<int> get level3 => new NotusAttribute<int>._(key, scope, 3);
 }
 
+class AlignmentAttributeBuilder extends NotusAttributeBuilder<String> {
+  static const _kAlignment = 'alignment';
+  const AlignmentAttributeBuilder._()
+      : super._(_kAlignment, NotusAttributeScope.line);
+
+  /// ac alignment, equivalent of `ac` in HTML.
+  NotusAttribute<String> get ac => new NotusAttribute<String>._(key, scope, 'ac');
+
+  /// ar alignment, equivalent of `ar` in HTML.
+  NotusAttribute<String> get ar => new NotusAttribute<String>._(key, scope, 'ar');
+
+  /// al alignment, equivalent of `al` in HTML.
+  NotusAttribute<String> get al => new NotusAttribute<String>._(key, scope, 'al');
+}
+
 /// Builder for block attribute styles (number/bullet lists, code and quote).
 ///
 /// There is no need to use this class directly, consider using
@@ -365,6 +408,9 @@ class BlockAttributeBuilder extends NotusAttributeBuilder<String> {
   /// Formats a block of lines as a bullet list.
   NotusAttribute<String> get bulletList =>
       new NotusAttribute<String>._(key, scope, 'ul');
+
+  NotusAttribute<String> get checklist =>
+      new NotusAttribute<String>._(key, scope, 'cl');
 
   /// Formats a block of lines as a number list.
   NotusAttribute<String> get numberList =>

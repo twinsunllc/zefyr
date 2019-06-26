@@ -22,7 +22,10 @@ class RawZefyrLine extends StatefulWidget {
     @required this.node,
     this.style,
     this.padding,
+    this.textAlign,
   }) : super(key: key);
+
+  final TextAlign textAlign;
 
   /// Line in the document represented by this widget.
   final LineNode node;
@@ -57,6 +60,7 @@ class _RawZefyrLineState extends State<RawZefyrLine> {
       content = ZefyrRichText(
         node: widget.node,
         text: buildText(context),
+        textAlign: (widget.textAlign == null) ? TextAlign.start : widget.textAlign,
       );
     }
 
@@ -130,6 +134,9 @@ class _RawZefyrLineState extends State<RawZefyrLine> {
     TextStyle result = new TextStyle();
     if (style.containsSame(NotusAttribute.bold)) {
       result = result.merge(theme.boldStyle);
+    }
+    if (style.containsSame(NotusAttribute.underline)) {
+      result = result.merge(theme.underlineStyle);
     }
     if (style.containsSame(NotusAttribute.italic)) {
       result = result.merge(theme.italicStyle);
