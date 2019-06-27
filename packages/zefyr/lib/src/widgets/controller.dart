@@ -39,6 +39,8 @@ class ZefyrController extends ChangeNotifier {
   TextSelection get selection => _selection;
   TextSelection _selection = _kZeroSelection;
 
+  final List<NotusAttribute> _toggledAttributes = [];
+
   ChangeSource _lastChangeSource;
 
   /// Source of the last text or selection change.
@@ -47,15 +49,13 @@ class ZefyrController extends ChangeNotifier {
   /// Updates selection with specified [value].
   ///
   /// [value] and [source] cannot be `null`.
-  void updateSelection(TextSelection value,
-      {ChangeSource source: ChangeSource.remote}) {
+  void updateSelection(TextSelection value, {ChangeSource source: ChangeSource.remote}) {
     _updateSelectionSilent(value, source: source);
     notifyListeners();
   }
 
   // Updates selection without triggering notifications to listeners.
-  void _updateSelectionSilent(TextSelection value,
-      {ChangeSource source: ChangeSource.remote}) {
+  void _updateSelectionSilent(TextSelection value, {ChangeSource source: ChangeSource.remote}) {
     assert(value != null && source != null);
     _selection = value;
     _lastChangeSource = source;
@@ -75,8 +75,7 @@ class ZefyrController extends ChangeNotifier {
   /// can be composed without errors.
   ///
   /// If composing this change fails then this method throws [ComposeError].
-  void compose(Delta change,
-      {TextSelection selection, ChangeSource source: ChangeSource.remote}) {
+  void compose(Delta change, {TextSelection selection, ChangeSource source: ChangeSource.remote}) {
     if (change.isNotEmpty) {
       _document.compose(change, source);
     }
@@ -85,10 +84,8 @@ class ZefyrController extends ChangeNotifier {
     } else {
       // Transform selection against the composed change and give priority to
       // current position (force: false).
-      final base =
-          change.transformPosition(_selection.baseOffset, force: false);
-      final extent =
-          change.transformPosition(_selection.extentOffset, force: false);
+      final base = change.transformPosition(_selection.baseOffset, force: false);
+      final extent = change.transformPosition(_selection.extentOffset, force: false);
       selection = _selection.copyWith(baseOffset: base, extentOffset: extent);
       if (_selection != selection) {
         _updateSelectionSilent(selection, source: source);
@@ -98,9 +95,13 @@ class ZefyrController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void replaceText(int index, int length, String text,
-      {TextSelection selection}) {
+  void replaceText(int index, int length, String text, {TextSelection selection}) {
+
+    print('index: ${index} length: ${length} text: ${text}');
+
     Delta delta;
+
+    Map attributes = Map<String, dynamic>();
 
     if (length > 0 || text.isNotEmpty) {
       delta = document.replace(index, length, text);
@@ -114,7 +115,7 @@ class ZefyrController extends ChangeNotifier {
         // is different from user's version (in deletes and inserts).
         Delta user = new Delta()
           ..retain(index)
-          ..insert(text)
+          ..insert(text, attributes)
           ..delete(length);
         int positionDelta = getPositionDelta(user, delta);
         _updateSelectionSilent(
@@ -126,26 +127,45 @@ class ZefyrController extends ChangeNotifier {
         );
       }
     }
+
     _lastChangeSource = ChangeSource.local;
     notifyListeners();
+
+    if (delta != null) {
+      _toggledAttributes.forEach((NotusAttribute attributeToAdd) {
+        formatText(index, 1, attributeToAdd);
+      });
+    }
   }
 
   void formatText(int index, int length, NotusAttribute attribute) {
+    print('index: ${index} length: ${length} attribute: ${attribute.key}');
     final change = document.format(index, length, attribute);
     _lastChangeSource = ChangeSource.local;
     // Transform selection against the composed change and give priority to
     // the change. This is needed in cases when format operation actually
     // inserts data into the document (e.g. embeds).
     final base = change.transformPosition(_selection.baseOffset);
-    final extent =
-        change.transformPosition(_selection.extentOffset);
-    final adjustedSelection =
-        _selection.copyWith(baseOffset: base, extentOffset: extent);
+    final extent = change.transformPosition(_selection.extentOffset);
+    final adjustedSelection = _selection.copyWith(baseOffset: base, extentOffset: extent);
     if (_selection != adjustedSelection) {
       _updateSelectionSilent(adjustedSelection, source: _lastChangeSource);
     }
     notifyListeners();
   }
+
+  void toggleOnStyle(NotusAttribute attribute) {
+    _toggledAttributes.remove(attribute);
+    _toggledAttributes.add(attribute);
+    //notifyListeners();
+  }
+
+  void toggleOffStyle(NotusAttribute attribute) {
+    _toggledAttributes.remove(attribute);
+    //notifyListeners();
+  }
+
+  List<NotusAttribute> get currentToggles => _toggledAttributes;
 
   /// Formats current selection with [attribute].
   void formatSelection(NotusAttribute attribute) {

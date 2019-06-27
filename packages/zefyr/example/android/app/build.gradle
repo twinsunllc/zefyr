@@ -11,12 +11,12 @@ if (flutterRoot == null) {
     throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+def flutterVersionCode = 1
 if (flutterVersionCode == null) {
     throw new GradleException("versionCode not found. Define flutter.versionCode in the local.properties file.")
 }
 
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
+def flutterVersionName = 'edit-overhaul'
 if (flutterVersionName == null) {
     throw new GradleException("versionName not found. Define flutter.versionName in the local.properties file.")
 }
@@ -36,7 +36,7 @@ android {
         applicationId "com.zefyr.example"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode flutterVersionCode.toInteger()
+        versionCode 1
         versionName flutterVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

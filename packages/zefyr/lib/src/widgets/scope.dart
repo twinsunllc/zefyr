@@ -114,6 +114,7 @@ class ZefyrScope extends ChangeNotifier {
 
   NotusStyle get selectionStyle => _selectionStyle;
   NotusStyle _selectionStyle;
+  List<NotusAttribute> get toggledStyles => _controller?.currentToggles;
   TextSelection get selection => _selection;
   TextSelection _selection;
 
@@ -167,6 +168,14 @@ class ZefyrScope extends ChangeNotifier {
     assert(isEditable);
     assert(!_disposed);
     _controller.formatSelection(value);
+  }
+
+  void toggleOnStyle(NotusAttribute attribute){
+    _controller.toggleOnStyle(attribute);
+  }
+
+  void toggleOffStyle(NotusAttribute attribute){
+    _controller.toggleOffStyle(attribute);
   }
 
   void focus() {

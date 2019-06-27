@@ -17,7 +17,7 @@ import 'toolbar.dart';
 /// [ZefyrButton.text] constructors.
 ///
 /// Toolbar buttons are normally created by a [ZefyrToolbarDelegate].
-class ZefyrButton extends StatelessWidget {
+class ZefyrButton extends StatefulWidget {
   /// Creates a toolbar button with an icon.
   ZefyrButton.icon({
     @required this.action,
@@ -59,8 +59,13 @@ class ZefyrButton extends StatelessWidget {
   /// Callback to trigger when this button is tapped.
   final VoidCallback onPressed;
 
+  @override
+  _ZefyrButtonState createState() => _ZefyrButtonState();
+}
+
+class _ZefyrButtonState extends State<ZefyrButton> {
   bool get isAttributeAction {
-    return kZefyrToolbarAttributeActions.keys.contains(action);
+    return kZefyrToolbarAttributeActions.keys.contains(widget.action);
   }
 
   @override
@@ -72,22 +77,22 @@ class ZefyrButton extends StatelessWidget {
     final iconColor = (pressedHandler == null)
         ? toolbarTheme.disabledIconColor
         : toolbarTheme.iconColor;
-    if (_icon != null) {
+    if (widget._icon != null) {
       return RawZefyrButton.icon(
-        action: action,
-        icon: _icon,
-        size: _iconSize,
+        action: widget.action,
+        icon: widget._icon,
+        size: widget._iconSize,
         iconColor: iconColor,
         color: _getColor(editor, toolbarTheme),
         onPressed: _getPressedHandler(editor, toolbar),
       );
     } else {
-      assert(_text != null);
-      var style = _textStyle ?? new TextStyle();
+      assert(widget._text != null);
+      var style = widget._textStyle ?? new TextStyle();
       style = style.copyWith(color: iconColor);
       return RawZefyrButton(
-        action: action,
-        child: new Text(_text, style: style),
+        action: widget.action,
+        child: new Text(widget._text, style: style),
         color: _getColor(editor, toolbarTheme),
         onPressed: _getPressedHandler(editor, toolbar),
       );
@@ -96,27 +101,27 @@ class ZefyrButton extends StatelessWidget {
 
   Color _getColor(ZefyrScope editor, ZefyrToolbarTheme theme) {
     if (isAttributeAction) {
-      final attribute = kZefyrToolbarAttributeActions[action];
+      final attribute = kZefyrToolbarAttributeActions[widget.action];
       final isToggled = (attribute is NotusAttribute)
           ? editor.selectionStyle.containsSame(attribute)
           : editor.selectionStyle.contains(attribute);
-      return isToggled ? theme.toggleColor : null;
+      return isToggled || editor.toggledStyles.contains(attribute) ? theme.toggleColor : null;
     }
     return null;
   }
 
   VoidCallback _getPressedHandler(
       ZefyrScope editor, ZefyrToolbarState toolbar) {
-    if (onPressed != null) {
-      return onPressed;
+    if (widget.onPressed != null) {
+      return widget.onPressed;
     } else if (isAttributeAction) {
-      final attribute = kZefyrToolbarAttributeActions[action];
+      final attribute = kZefyrToolbarAttributeActions[widget.action];
       if (attribute is NotusAttribute) {
         return () => _toggleAttribute(attribute, editor);
       }
-    } else if (action == ZefyrToolbarAction.close) {
+    } else if (widget.action == ZefyrToolbarAction.close) {
       return () => toolbar.closeOverlay();
-    } else if (action == ZefyrToolbarAction.hideKeyboard) {
+    } else if (widget.action == ZefyrToolbarAction.hideKeyboard) {
       return () => editor.hideKeyboard();
     }
 
@@ -124,12 +129,21 @@ class ZefyrButton extends StatelessWidget {
   }
 
   void _toggleAttribute(NotusAttribute attribute, ZefyrScope editor) {
-    final isToggled = editor.selectionStyle.containsSame(attribute);
+    final isToggled = editor.toggledStyles.contains(attribute);
     if (isToggled) {
+      editor.toggleOffStyle(attribute);
+    } else {
+      editor.toggleOnStyle(attribute);
+    }
+    final isTextToggled = editor.selectionStyle.containsSame(attribute);
+    if (isTextToggled) {
       editor.formatSelection(attribute.unset);
     } else {
       editor.formatSelection(attribute);
     }
+    setState(() {
+      
+    });
   }
 }
 
