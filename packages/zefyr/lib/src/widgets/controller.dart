@@ -155,6 +155,7 @@ class ZefyrController extends ChangeNotifier {
   }
 
   void toggleOnStyle(NotusAttribute attribute) {
+    _toggledAttributes.remove(attribute.unset);
     _toggledAttributes.remove(attribute);
     _toggledAttributes.add(attribute);
     //notifyListeners();
@@ -162,6 +163,8 @@ class ZefyrController extends ChangeNotifier {
 
   void toggleOffStyle(NotusAttribute attribute) {
     _toggledAttributes.remove(attribute);
+    _toggledAttributes.remove(attribute.unset);
+    _toggledAttributes.add(attribute.unset);
     //notifyListeners();
   }
 
