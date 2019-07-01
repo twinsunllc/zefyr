@@ -1,6 +1,7 @@
 // Copyright (c) 2018, the Zefyr project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:notus/notus.dart';
@@ -43,6 +44,7 @@ class RawZefyrLine extends StatefulWidget {
 
 class _RawZefyrLineState extends State<RawZefyrLine> {
   final LayerLink _link = new LayerLink();
+  bool _shouldAddStrikeThrough = false;
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +95,12 @@ class _RawZefyrLineState extends State<RawZefyrLine> {
     }
   }
 
+  void addStrikeThrough(bool shouldAdd) {
+    setState(() {
+      _shouldAddStrikeThrough = shouldAdd;
+    });
+  }
+
   void bringIntoView(BuildContext context) {
     ScrollableState scrollable = Scrollable.of(context);
     final object = context.findRenderObject();
@@ -141,10 +149,45 @@ class _RawZefyrLineState extends State<RawZefyrLine> {
     if (style.containsSame(NotusAttribute.italic)) {
       result = result.merge(theme.italicStyle);
     }
+    if (style.containsSame(NotusAttribute.strikeThrough)) {
+      result = result.merge(theme.strikeThroughStyle);
+    }
     if (style.contains(NotusAttribute.link)) {
       result = result.merge(theme.linkStyle);
     }
+    if (style.contains(NotusAttribute.textColor)) {
+      NotusAttribute<String> attribute = style.get(NotusAttribute.textColor);
+      if (attribute != null && attribute.value != null) {
+        result = result.merge(new TextStyle(color: _getColorFromValue(attribute.value)));
+      }
+    }
+    if (style.contains(NotusAttribute.backgroundColor)) {
+      NotusAttribute<String> attribute = style.get(NotusAttribute.backgroundColor);
+      if (attribute != null && attribute.value != null) {
+        result = result.merge(new TextStyle(background: Paint()..color = _getColorFromValue(attribute.value)));
+      }
+    }
     return result;
+  }
+
+  Color _getColorFromValue(String value) {
+    if (value == 'black' || value == 'white') {
+      return (value == 'black') ? Colors.black : Colors.white;
+    }
+
+    List<int> rgbValues = _parseOutRgbValues(value);
+    return Color.fromRGBO(rgbValues[0], rgbValues[1], rgbValues[2], 1.0);
+  }
+
+  List<int> _parseOutRgbValues(String value) {
+    String numbersString = value.substring(value.indexOf('(') + 1, value.indexOf(')'));
+    List<String> values = numbersString.split(',');
+    List<int> intRgbValues = [];
+    for (var value in values) {
+      int val = int.tryParse(value.trim()) ?? 0;
+      intRgbValues.add(val);
+    }
+    return intRgbValues;
   }
 
   Widget buildEmbed(BuildContext context, ZefyrScope scope) {

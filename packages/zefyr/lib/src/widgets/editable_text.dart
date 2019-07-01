@@ -1,6 +1,8 @@
 // Copyright (c) 2018, the Zefyr project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
+import 'dart:collection';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:notus/notus.dart';
@@ -189,6 +191,9 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
 
   Widget _defaultChildBuilder(BuildContext context, Node node) {
     if (node is LineNode) {
+      if (node.style.contains(NotusAttribute.textColor)) {
+        print('Contains Text Color');
+      }
       if (node.hasEmbed) {
         return new RawZefyrLine(node: node);
       } else if (node.style.contains(NotusAttribute.heading)) {
@@ -209,7 +214,9 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
       return new ZefyrCode(node: block);
     } else if (blockStyle == NotusAttribute.block.bulletList) {
       return new ZefyrList(node: block);
-    }  else if (blockStyle == NotusAttribute.block.checklist) {
+    } else if (blockStyle == NotusAttribute.block.checklistChecked) {
+      return new ZefyrList(node: block);
+    } else if (blockStyle == NotusAttribute.block.checklistUnchecked) {
       return new ZefyrList(node: block);
     } else if (blockStyle == NotusAttribute.block.numberList) {
       return new ZefyrList(node: block);

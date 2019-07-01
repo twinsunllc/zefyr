@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 import 'package:flutter/material.dart';
 import 'package:notus/notus.dart';
+import 'package:zefyr/src/widgets/checklist_item_box.dart';
 
 import 'common.dart';
 import 'paragraph.dart';
@@ -43,21 +44,42 @@ class ZefyrList extends StatelessWidget {
   }
 }
 
-/// An item in a [ZefyrList].
-class ZefyrListItem extends StatelessWidget {
-  ZefyrListItem({Key key, this.index, this.node}) : super(key: key);
-
+class ZefyrListItem extends StatefulWidget {
   final int index;
   final LineNode node;
+  ZefyrListItem({Key key, this.index, this.node}) : super(key: key);
+
+  _ZefyrListItemState createState() => _ZefyrListItemState();
+}
+
+class _ZefyrListItemState extends State<ZefyrListItem> {
+  int index;
+  LineNode node;
+  bool isChecked = false;
+
+  @override
+  void initState() {
+    index = widget.index;
+    node = widget.node;
+    final BlockNode block = node.parent;
+    final style = block.style.get(NotusAttribute.block);
+    if (style == NotusAttribute.block.checklistChecked || style == NotusAttribute.block.checklistUnchecked) {
+      isChecked = (style == NotusAttribute.block.checklistChecked) ? true : false;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (node.style.contains(NotusAttribute.textColor)) {
+      print('Contains Text Color');
+    }
     final BlockNode block = node.parent;
     final style = block.style.get(NotusAttribute.block);
     final TextAlign textAlign = (node.style.contains(NotusAttribute.alignment)) ? _getTextAlign(node.style) : TextAlign.start;
     final theme = ZefyrTheme.of(context);
     final bulletText =
-        (style == NotusAttribute.block.bulletList) ? '•' : (style == NotusAttribute.block.numberList) ? '$index.' : '';
+        (style == NotusAttribute.block.bulletList) ? '•' : (style == NotusAttribute.block.numberList) ? '$index.' : '•';
 
     TextStyle textStyle;
     Widget content;
@@ -65,20 +87,28 @@ class ZefyrListItem extends StatelessWidget {
 
     if (node.style.contains(NotusAttribute.heading)) {
       final headingTheme = ZefyrHeading.themeOf(node, context);
-      textStyle = headingTheme.textStyle;
+      if (style != NotusAttribute.block.checklistChecked && style != NotusAttribute.block.checklistUnchecked) {
+        textStyle = headingTheme.textStyle;
+      } else {
+        textStyle = (!isChecked) ? headingTheme.textStyle : theme.strikeThrough;
+      }
       padding = headingTheme.padding;
       content = new ZefyrHeading(node: node, textAlign: textAlign,);
     } else {
-      textStyle = theme.paragraphTheme.textStyle;
+      if (style != NotusAttribute.block.checklistChecked && style != NotusAttribute.block.checklistUnchecked) {
+        textStyle = theme.paragraphTheme.textStyle;
+      } else {
+        textStyle = (!isChecked) ? theme.paragraphTheme.textStyle : theme.strikeThrough;
+      }
       content = new RawZefyrLine(node: node, style: textStyle, textAlign: textAlign);
     }
 
-    Widget bullet = (style != NotusAttribute.block.checklist) ?
-        SizedBox(width: 24.0, child: Text(bulletText, style: textStyle)) : 
-        SizedBox(width: 24.0, child: Padding(
-          padding: const EdgeInsets.only(right: 12.0),
-          child: Checkbox(value: true, onChanged: (bool) {},),
-        ));
+    Widget bullet = (style != NotusAttribute.block.checklistChecked && style != NotusAttribute.block.checklistUnchecked) ?
+        SizedBox(width: 24.0, child: Text(bulletText, style: textStyle)) :
+        SizedBox(width: 28.0, child: Padding(
+          padding: const EdgeInsets.only(right: 4.0),
+          child: ChecklistItemBox(isChecked: isChecked, onToggle: toggleCheckbox,)),
+        );
     if (padding != null) {
       bullet = Padding(padding: padding, child: bullet);
     }
@@ -104,5 +134,11 @@ class ZefyrListItem extends StatelessWidget {
       return true;
     }
     return false;
+  }
+
+  void toggleCheckbox() {
+    setState(() {
+      isChecked = !isChecked;
+    });
   }
 }
