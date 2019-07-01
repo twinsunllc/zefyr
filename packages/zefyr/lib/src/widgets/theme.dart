@@ -56,7 +56,9 @@ class ZefyrThemeData {
   final TextStyle boldStyle;
   final TextStyle underlineStyle;
   final TextStyle italicStyle;
+  final TextStyle strikeThroughStyle;
   final TextStyle linkStyle;
+  final TextStyle strikeThrough;
   final StyleTheme paragraphTheme;
   final HeadingTheme headingTheme;
   final BlockTheme blockTheme;
@@ -79,14 +81,18 @@ class ZefyrThemeData {
     final boldStyle = new TextStyle(fontWeight: FontWeight.bold);
     final underlineStyle = new TextStyle(decoration: TextDecoration.underline);
     final italicStyle = new TextStyle(fontStyle: FontStyle.italic);
+    final strikeThroughStyle = paragraphStyle.copyWith(decoration: TextDecoration.lineThrough);
     final linkStyle =
         TextStyle(color: Colors.blue, decoration: TextDecoration.underline);
+    final strikeThrough = paragraphStyle.copyWith(decoration: TextDecoration.lineThrough);
 
     return new ZefyrThemeData(
       boldStyle: boldStyle,
       underlineStyle: underlineStyle,
       italicStyle: italicStyle,
+      strikeThroughStyle: strikeThroughStyle,
       linkStyle: linkStyle,
+      strikeThrough: strikeThrough,
       paragraphTheme:
           new StyleTheme(textStyle: paragraphStyle, padding: padding),
       headingTheme: new HeadingTheme.fallback(),
@@ -102,7 +108,9 @@ class ZefyrThemeData {
     this.boldStyle,
     this.underlineStyle,
     this.italicStyle,
+    this.strikeThroughStyle,
     this.linkStyle,
+    this.strikeThrough,
     this.paragraphTheme,
     this.headingTheme,
     this.blockTheme,
@@ -117,7 +125,9 @@ class ZefyrThemeData {
     TextStyle boldStyle,
     TextStyle underlineStyle,
     TextStyle italicStyle,
+    TextStyle strikeThroughStyle,
     TextStyle linkStyle,
+    TextStyle strikeThrough,
     StyleTheme paragraphTheme,
     HeadingTheme headingTheme,
     BlockTheme blockTheme,
@@ -130,7 +140,9 @@ class ZefyrThemeData {
       boldStyle: boldStyle ?? this.boldStyle,
       underlineStyle: underlineStyle ?? this.underlineStyle,
       italicStyle: italicStyle ?? this.italicStyle,
+      strikeThroughStyle: strikeThroughStyle ?? this.strikeThroughStyle,
       linkStyle: linkStyle ?? this.linkStyle,
+      strikeThrough: strikeThrough ?? this.strikeThrough,
       paragraphTheme: paragraphTheme ?? this.paragraphTheme,
       headingTheme: headingTheme ?? this.headingTheme,
       blockTheme: blockTheme ?? this.blockTheme,
@@ -146,7 +158,9 @@ class ZefyrThemeData {
       boldStyle: other.boldStyle,
       underlineStyle: other.underlineStyle,
       italicStyle: other.italicStyle,
+      strikeThroughStyle: strikeThroughStyle,
       linkStyle: other.linkStyle,
+      strikeThrough: other.strikeThrough,
       paragraphTheme: other.paragraphTheme,
       headingTheme: other.headingTheme,
       blockTheme: other.blockTheme,
@@ -214,8 +228,11 @@ class BlockTheme {
   /// Style theme for bullet lists.
   final StyleTheme bulletList;
 
-  /// Style theme for checklists.
-  final StyleTheme checklist;
+  /// Style theme for checklistCheckeds.
+  final StyleTheme checklistChecked;
+
+  /// Style theme for checklistCheckeds.
+  final StyleTheme checklistUnchecked;
 
   /// Style theme for number lists.
   final StyleTheme numberList;
@@ -228,7 +245,8 @@ class BlockTheme {
 
   BlockTheme({
     @required this.bulletList,
-    @required this.checklist,
+    @required this.checklistChecked,
+    @required this.checklistUnchecked,
     @required this.numberList,
     @required this.quote,
     @required this.code,
@@ -239,7 +257,8 @@ class BlockTheme {
     final padding = const EdgeInsets.only(bottom: 8.0);
     return new BlockTheme(
       bulletList: new StyleTheme(padding: padding),
-      checklist: new StyleTheme(padding: padding),
+      checklistChecked: new StyleTheme(padding: padding),
+      checklistUnchecked: new StyleTheme(padding: padding),
       numberList: new StyleTheme(padding: padding),
       quote: new StyleTheme(
         textStyle: new TextStyle(color: Colors.grey.shade700),

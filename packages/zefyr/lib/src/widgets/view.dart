@@ -96,7 +96,9 @@ class ZefyrViewState extends State<ZefyrView> {
       return new ZefyrCode(node: block);
     } else if (blockStyle == NotusAttribute.block.bulletList) {
       return new ZefyrList(node: block);
-    }  else if (blockStyle == NotusAttribute.block.checklist) {
+    } else if (blockStyle == NotusAttribute.block.checklistChecked) {
+      return new ZefyrList(node: block);
+    } else if (blockStyle == NotusAttribute.block.checklistUnchecked) {
       return new ZefyrList(node: block);
     } else if (blockStyle == NotusAttribute.block.numberList) {
       return new ZefyrList(node: block);

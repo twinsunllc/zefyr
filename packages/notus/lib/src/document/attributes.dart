@@ -41,8 +41,10 @@ abstract class NotusAttributeBuilder<T> implements NotusAttributeKey<T> {
   final String key;
   final NotusAttributeScope scope;
   NotusAttribute<T> get unset => new NotusAttribute<T>._(key, scope, null);
-  NotusAttribute<T> withValue(T value) =>
-      new NotusAttribute<T>._(key, scope, value);
+  NotusAttribute<T> withValue(T value) {
+    print('Value: ${value}');
+    return new NotusAttribute<T>._(key, scope, value);
+  }
 }
 
 /// Style attribute applicable to a segment of a Notus document.
@@ -66,6 +68,7 @@ abstract class NotusAttributeBuilder<T> implements NotusAttributeKey<T> {
 ///
 ///   * [NotusAttribute.bold]
 ///   * [NotusAttribute.italic]
+///   * [NotusAttribute.strikeThrough]
 ///   * [NotusAttribute.link]
 ///   * [NotusAttribute.heading]
 ///   * [NotusAttribute.block]
@@ -78,11 +81,14 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
     NotusAttribute.bold.key: NotusAttribute.bold,
     NotusAttribute.underline.key: NotusAttribute.underline,
     NotusAttribute.italic.key: NotusAttribute.italic,
+    NotusAttribute.strikeThrough.key: NotusAttribute.strikeThrough,
     NotusAttribute.link.key: NotusAttribute.link,
     NotusAttribute.heading.key: NotusAttribute.heading,
     NotusAttribute.alignment.key: NotusAttribute.alignment,
     NotusAttribute.block.key: NotusAttribute.block,
     NotusAttribute.embed.key: NotusAttribute.embed,
+    NotusAttribute.textColor.key: NotusAttribute.textColor,
+    NotusAttribute.backgroundColor.key: NotusAttribute.backgroundColor,
   };
 
   // Inline attributes
@@ -96,8 +102,17 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
   /// Italic style attribute.
   static const italic = const _ItalicAttribute();
 
+  /// StrikeThrough style attribute.
+  static const strikeThrough = const _StrikeThroughAttribute();
+
   /// Link style attribute.
   static const link = const LinkAttributeBuilder._();
+
+  /// Link style attribute.
+  static const textColor = const _TextColorAttribute();
+
+  /// Link style attribute.
+  static const backgroundColor = const _BackgroundColorAttribute();
 
   // Line attributes
 
@@ -130,8 +145,11 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
   /// Alias for [NotusAttribute.block.bulletList].
   static NotusAttribute<String> get ul => block.bulletList;
 
-  /// Alias for [NotusAttribute.block.checklist].
-  static NotusAttribute<String> get cl => block.checklist;
+  /// Alias for [NotusAttribute.block.checklistChecked].
+  static NotusAttribute<String> get clc => block.checklistChecked;
+
+  /// Alias for [NotusAttribute.block.checklistChecked].
+  static NotusAttribute<String> get clu => block.checklistUnchecked;
 
   /// Alias for [NotusAttribute.block.numberList].
   static NotusAttribute<String> get ol => block.numberList;
@@ -350,6 +368,21 @@ class _ItalicAttribute extends NotusAttribute<bool> {
   const _ItalicAttribute() : super._('i', NotusAttributeScope.inline, true);
 }
 
+/// Applies strikeThrough style to a text segment.
+class _StrikeThroughAttribute extends NotusAttribute<bool> {
+  const _StrikeThroughAttribute() : super._('s', NotusAttributeScope.inline, true);
+}
+
+/// Applies bold style to a text segment.
+class _TextColorAttribute extends NotusAttribute<String> {
+  const _TextColorAttribute() : super._('text-color', NotusAttributeScope.inline, 'text-color');
+}
+
+/// Applies bold style to a text segment.
+class _BackgroundColorAttribute extends NotusAttribute<String> {
+  const _BackgroundColorAttribute() : super._('background-color', NotusAttributeScope.inline, 'background-color');
+}
+
 /// Builder for link attribute values.
 ///
 /// There is no need to use this class directly, consider using
@@ -409,8 +442,11 @@ class BlockAttributeBuilder extends NotusAttributeBuilder<String> {
   NotusAttribute<String> get bulletList =>
       new NotusAttribute<String>._(key, scope, 'ul');
 
-  NotusAttribute<String> get checklist =>
-      new NotusAttribute<String>._(key, scope, 'cl');
+  NotusAttribute<String> get checklistChecked =>
+      new NotusAttribute<String>._(key, scope, 'clc');
+
+  NotusAttribute<String> get checklistUnchecked =>
+      new NotusAttribute<String>._(key, scope, 'clu');
 
   /// Formats a block of lines as a number list.
   NotusAttribute<String> get numberList =>
@@ -495,3 +531,44 @@ class EmbedAttribute extends NotusAttribute<Map<String, dynamic>> {
     return hashObjects(objects);
   }
 }
+
+// class EmbedAttributeBuilder
+//     extends NotusAttributeBuilder<Map<String, dynamic>> {
+//   const EmbedAttributeBuilder._()
+//       : super._(EmbedAttribute._kEmbed, NotusAttributeScope.inline);
+
+//   NotusAttribute<Map<String, dynamic>> get horizontalRule =>
+//       EmbedAttribute.horizontalRule();
+
+//   NotusAttribute<Map<String, dynamic>> image(String source) =>
+//       EmbedAttribute.image(source);
+
+//   @override
+//   NotusAttribute<Map<String, dynamic>> get unset => EmbedAttribute._(null);
+
+//   NotusAttribute<Map<String, dynamic>> withValue(String value) =>
+//       EmbedAttribute._(value);
+// }
+
+// class TextColorAttribute extends NotusAttribute<Map<String, dynamic>> {
+//   static const _kEmbed = 'text-color';
+
+//   TextColorAttribute._(Map<String, dynamic> value)
+//       : super._(_kEmbed, NotusAttributeScope.inline, value);
+
+//   @override
+//   NotusAttribute<Map<String, dynamic>> get unset => new EmbedAttribute._(null);
+
+//   @override
+//   int get hashCode {
+//     final objects = [key, scope];
+//     if (value != null) {
+//       final valueHashes =
+//           value.entries.map((entry) => hash2(entry.key, entry.value));
+//       objects.addAll(valueHashes);
+//     } else {
+//       objects.add(value);
+//     }
+//     return hashObjects(objects);
+//   }
+// }
