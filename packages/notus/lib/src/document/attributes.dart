@@ -42,7 +42,6 @@ abstract class NotusAttributeBuilder<T> implements NotusAttributeKey<T> {
   final NotusAttributeScope scope;
   NotusAttribute<T> get unset => new NotusAttribute<T>._(key, scope, null);
   NotusAttribute<T> withValue(T value) {
-    print('Value: ${value}');
     return new NotusAttribute<T>._(key, scope, value);
   }
 }
@@ -164,6 +163,14 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
   static const embed = const EmbedAttributeBuilder._();
 
   static NotusAttribute _fromKeyValue(String key, dynamic value) {
+    if (!_registry.containsKey(key))
+      throw new ArgumentError.value(
+          key, 'No attribute with key "$key" registered.');
+    final builder = _registry[key];
+    return builder.withValue(value);
+  }
+
+  static NotusAttribute fromKeyValue(String key, dynamic value) {
     if (!_registry.containsKey(key))
       throw new ArgumentError.value(
           key, 'No attribute with key "$key" registered.');

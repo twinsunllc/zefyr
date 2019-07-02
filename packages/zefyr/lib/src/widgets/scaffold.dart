@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ZefyrScaffold extends StatefulWidget {
   final Widget child;
 
-  const ZefyrScaffold({Key key, this.child}) : super(key: key);
+  ZefyrScaffold({Key key, this.child}) : super(key: key);
 
   static ZefyrScaffoldState of(BuildContext context) {
     final _ZefyrScaffoldAccess widget =

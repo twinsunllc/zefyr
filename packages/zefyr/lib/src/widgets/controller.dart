@@ -132,6 +132,13 @@ class ZefyrController extends ChangeNotifier {
     notifyListeners();
 
     if (delta != null) {
+      print('${delta.toJson().toString()}');
+      for(var i = 0; i < delta.length; i++){
+        print('${delta.elementAt(i).data}');
+        if(delta.elementAt(i).isDelete){
+          _toggledAttributes.clear();
+        }
+      }
       _toggledAttributes.forEach((NotusAttribute attributeToAdd) {
         formatText(index, 1, attributeToAdd);
       });
@@ -171,10 +178,14 @@ class ZefyrController extends ChangeNotifier {
   List<NotusAttribute> get currentToggles => _toggledAttributes;
 
   /// Formats current selection with [attribute].
-  void formatSelection(NotusAttribute attribute) {
-    int index = _selection.start;
-    int length = _selection.end - index;
+  void formatSelection(NotusAttribute attribute, {TextSelection selectedText}) {
+    int index = (selectedText != null) ? selectedText.start : _selection.start;
+    int length = (selectedText != null) ? selectedText.end - index : _selection.end - index;
     formatText(index, length, attribute);
+  }
+
+  TextSelection getSelectedText() {
+    return _selection;
   }
 
   NotusStyle getSelectionStyle() {

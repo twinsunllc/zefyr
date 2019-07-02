@@ -69,6 +69,7 @@ class _ZefyrEditorState extends State<ZefyrEditor> {
         key: _toolbarKey,
         editor: _scope,
         delegate: widget.toolbarDelegate,
+        editorContext: context,
       ),
     );
   }

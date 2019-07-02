@@ -144,12 +144,11 @@ void main() {
     });
   });
 
-  group('$ImageButton', () {
+  group('', () {
     const MethodChannel channel =
         const MethodChannel('plugins.flutter.io/image_picker');
 
     final List<MethodCall> log = <MethodCall>[];
-
     setUp(() {
       channel.setMockMethodCallHandler((MethodCall methodCall) async {
         log.add(methodCall);

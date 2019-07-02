@@ -15,7 +15,13 @@ import 'theme.dart';
 enum ZefyrToolbarAction {
   bold,
   italic,
+  underline,
+  strikeThrough,
   link,
+  textAlignment,
+  textAlignLeft,
+  textAlignCenter,
+  textAlignRight,
   unlink,
   clipboardCopy,
   openInBrowser,
@@ -25,12 +31,15 @@ enum ZefyrToolbarAction {
   headingLevel3,
   bulletList,
   numberList,
-  code,
-  quote,
-  horizontalRule,
-  image,
-  cameraImage,
-  galleryImage,
+  checklist,
+  textColor,
+  backgroundColor,
+  // code,
+  // quote,
+  //horizontalRule,
+  // image,
+  // cameraImage,
+  // galleryImage,
   hideKeyboard,
   close,
   confirm,
@@ -39,16 +48,25 @@ enum ZefyrToolbarAction {
 final kZefyrToolbarAttributeActions = <ZefyrToolbarAction, NotusAttributeKey>{
   ZefyrToolbarAction.bold: NotusAttribute.bold,
   ZefyrToolbarAction.italic: NotusAttribute.italic,
+  ZefyrToolbarAction.underline: NotusAttribute.underline,
+  ZefyrToolbarAction.strikeThrough: NotusAttribute.strikeThrough,
   ZefyrToolbarAction.link: NotusAttribute.link,
+  ZefyrToolbarAction.textAlignment: NotusAttribute.alignment,
+  ZefyrToolbarAction.textAlignLeft: NotusAttribute.alignment.al,
+  ZefyrToolbarAction.textAlignCenter: NotusAttribute.alignment.ac,
+  ZefyrToolbarAction.textAlignRight: NotusAttribute.alignment.ar,
   ZefyrToolbarAction.heading: NotusAttribute.heading,
   ZefyrToolbarAction.headingLevel1: NotusAttribute.heading.level1,
   ZefyrToolbarAction.headingLevel2: NotusAttribute.heading.level2,
   ZefyrToolbarAction.headingLevel3: NotusAttribute.heading.level3,
   ZefyrToolbarAction.bulletList: NotusAttribute.block.bulletList,
   ZefyrToolbarAction.numberList: NotusAttribute.block.numberList,
-  ZefyrToolbarAction.code: NotusAttribute.block.code,
-  ZefyrToolbarAction.quote: NotusAttribute.block.quote,
-  ZefyrToolbarAction.horizontalRule: NotusAttribute.embed.horizontalRule,
+  ZefyrToolbarAction.checklist: NotusAttribute.block.checklistUnchecked,
+  ZefyrToolbarAction.textColor: NotusAttribute.textColor,
+  ZefyrToolbarAction.backgroundColor: NotusAttribute.backgroundColor,
+  // ZefyrToolbarAction.code: NotusAttribute.block.code,
+  // ZefyrToolbarAction.quote: NotusAttribute.block.quote,
+  //ZefyrToolbarAction.horizontalRule: NotusAttribute.embed.horizontalRule,
 };
 
 /// Allows customizing appearance of [ZefyrToolbar].
@@ -104,10 +122,12 @@ class ZefyrToolbar extends StatefulWidget implements PreferredSizeWidget {
     @required this.editor,
     this.autoHide: true,
     this.delegate,
+    this.editorContext,
   }) : super(key: key);
 
   final ZefyrToolbarDelegate delegate;
   final ZefyrScope editor;
+  final BuildContext editorContext;
 
   /// Whether to automatically hide this toolbar when editor loses focus.
   final bool autoHide;
@@ -146,6 +166,7 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
   AnimationController _overlayAnimation;
   WidgetBuilder _overlayBuilder;
   Completer<void> _overlayCompleter;
+  BuildContext editorContext;
 
   TextSelection _selection;
 
@@ -192,7 +213,7 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
   @override
   void initState() {
     super.initState();
-    _delegate = widget.delegate ?? new _DefaultZefyrToolbarDelegate();
+    _delegate = widget.delegate ?? new _DefaultZefyrToolbarDelegate(editorConext: widget.editorContext);
     _overlayAnimation = new AnimationController(
         vsync: this, duration: Duration(milliseconds: 100));
     _selection = editor.selection;
@@ -202,7 +223,7 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
   void didUpdateWidget(ZefyrToolbar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.delegate != oldWidget.delegate) {
-      _delegate = widget.delegate ?? new _DefaultZefyrToolbarDelegate();
+      _delegate = widget.delegate ?? new _DefaultZefyrToolbarDelegate(editorConext: widget.editorContext);
     }
   }
 
@@ -252,14 +273,20 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
     final buttons = <Widget>[
       buildButton(context, ZefyrToolbarAction.bold),
       buildButton(context, ZefyrToolbarAction.italic),
+      buildButton(context, ZefyrToolbarAction.underline),
+      buildButton(context, ZefyrToolbarAction.strikeThrough),
       LinkButton(),
+      AlignmentButton(),
       HeadingButton(),
       buildButton(context, ZefyrToolbarAction.bulletList),
       buildButton(context, ZefyrToolbarAction.numberList),
-      buildButton(context, ZefyrToolbarAction.quote),
-      buildButton(context, ZefyrToolbarAction.code),
-      buildButton(context, ZefyrToolbarAction.horizontalRule),
-      ImageButton(),
+      buildButton(context, ZefyrToolbarAction.checklist),
+      buildButton(context, ZefyrToolbarAction.textColor),
+      buildButton(context, ZefyrToolbarAction.backgroundColor),
+      // buildButton(context, ZefyrToolbarAction.quote),
+      // buildButton(context, ZefyrToolbarAction.code),
+      //buildButton(context, ZefyrToolbarAction.horizontalRule),
+      //ImageButton(),
     ];
     return buttons;
   }
@@ -337,19 +364,28 @@ class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
   static const kDefaultButtonIcons = {
     ZefyrToolbarAction.bold: Icons.format_bold,
     ZefyrToolbarAction.italic: Icons.format_italic,
+    ZefyrToolbarAction.underline: Icons.format_underlined,
+    ZefyrToolbarAction.strikeThrough: Icons.format_strikethrough,
     ZefyrToolbarAction.link: Icons.link,
     ZefyrToolbarAction.unlink: Icons.link_off,
+    ZefyrToolbarAction.textAlignment: Icons.format_align_justify,
+    ZefyrToolbarAction.textAlignLeft: Icons.format_align_left,
+    ZefyrToolbarAction.textAlignCenter: Icons.format_align_center,
+    ZefyrToolbarAction.textAlignRight: Icons.format_align_right,
     ZefyrToolbarAction.clipboardCopy: Icons.content_copy,
     ZefyrToolbarAction.openInBrowser: Icons.open_in_new,
     ZefyrToolbarAction.heading: Icons.format_size,
     ZefyrToolbarAction.bulletList: Icons.format_list_bulleted,
     ZefyrToolbarAction.numberList: Icons.format_list_numbered,
-    ZefyrToolbarAction.code: Icons.code,
-    ZefyrToolbarAction.quote: Icons.format_quote,
-    ZefyrToolbarAction.horizontalRule: Icons.remove,
-    ZefyrToolbarAction.image: Icons.photo,
-    ZefyrToolbarAction.cameraImage: Icons.photo_camera,
-    ZefyrToolbarAction.galleryImage: Icons.photo_library,
+    ZefyrToolbarAction.checklist: Icons.check_circle,
+    ZefyrToolbarAction.textColor: Icons.format_color_text,
+    ZefyrToolbarAction.backgroundColor: Icons.format_color_fill,
+    // ZefyrToolbarAction.code: Icons.code,
+    // ZefyrToolbarAction.quote: Icons.format_quote,
+    //ZefyrToolbarAction.horizontalRule: Icons.remove,
+    // ZefyrToolbarAction.image: Icons.photo,
+    // ZefyrToolbarAction.cameraImage: Icons.photo_camera,
+    // ZefyrToolbarAction.galleryImage: Icons.photo_library,
     ZefyrToolbarAction.hideKeyboard: Icons.keyboard_hide,
     ZefyrToolbarAction.close: Icons.close,
     ZefyrToolbarAction.confirm: Icons.check,
@@ -369,6 +405,10 @@ class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
     ZefyrToolbarAction.headingLevel3: 'H3',
   };
 
+  BuildContext editorConext;
+
+  _DefaultZefyrToolbarDelegate({this.editorConext});
+
   @override
   Widget buildButton(BuildContext context, ZefyrToolbarAction action,
       {VoidCallback onPressed}) {
@@ -381,6 +421,7 @@ class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
         icon: icon,
         iconSize: size,
         onPressed: onPressed,
+        editorContext: editorConext,
       );
     } else {
       final text = kDefaultButtonTexts[action];
@@ -392,6 +433,7 @@ class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
         text: text,
         style: style,
         onPressed: onPressed,
+        editorContext: editorConext,
       );
     }
   }

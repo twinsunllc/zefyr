@@ -164,10 +164,14 @@ class ZefyrScope extends ChangeNotifier {
     _controller.updateSelection(value, source: source);
   }
 
-  void formatSelection(NotusAttribute value) {
+  void formatSelection(NotusAttribute value, {TextSelection selectedText}) {
     assert(isEditable);
     assert(!_disposed);
-    _controller.formatSelection(value);
+    if (selectedText == null) {
+      _controller.formatSelection(value);
+    } else {
+      _controller.formatSelection(value, selectedText: selectedText);
+    }
   }
 
   void toggleOnStyle(NotusAttribute attribute){

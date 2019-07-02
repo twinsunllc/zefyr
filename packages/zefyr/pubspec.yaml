@@ -17,6 +17,8 @@ dependencies:
   notus: 
     path: ../notus
   meta: ^1.1.0
+  flutter_colorpicker:
+    git: https://github.com/twinsunllc/flutter_colorpicker
 
 dev_dependencies:
   flutter_test:

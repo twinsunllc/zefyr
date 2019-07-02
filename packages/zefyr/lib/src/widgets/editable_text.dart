@@ -237,7 +237,7 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
   }
 
   bool _doesContainAttribute(NotusStyle style, NotusAttribute attribute) {
-    return style.single.value == attribute.value;
+    return style.containsSame(attribute);
   }
 
   void _updateSubscriptions([ZefyrEditableText oldWidget]) {

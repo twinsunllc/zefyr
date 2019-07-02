@@ -38,7 +38,8 @@ class ZefyrRichText extends LeafRenderObjectWidget {
       BuildContext context, RenderZefyrParagraph renderObject) {
     renderObject
       ..text = text
-      ..node = node;
+      ..node = node
+      ..textAlign = textAlign;
   }
 }
 
@@ -47,7 +48,7 @@ class RenderZefyrParagraph extends RenderParagraph
   RenderZefyrParagraph(
     TextSpan text, {
     @required LineNode node,
-    TextAlign textAlign: TextAlign.start,
+    TextAlign textAlign,
     @required TextDirection textDirection,
     bool softWrap: true,
     TextOverflow overflow: TextOverflow.clip,
@@ -56,7 +57,7 @@ class RenderZefyrParagraph extends RenderParagraph
   })  : _node = node,
         _prototypePainter = new TextPainter(
           text: new TextSpan(text: '.', style: text.style),
-          textAlign: textAlign,
+          textAlign: (textAlign == null) ? TextAlign.start : textAlign,
           textDirection: textDirection,
           textScaleFactor: textScaleFactor,
         ),
