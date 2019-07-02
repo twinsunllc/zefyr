@@ -11,17 +11,21 @@ import 'theme.dart';
 
 /// Represents number lists and bullet lists in a Zefyr editor.
 class ZefyrList extends StatelessWidget {
-  const ZefyrList({Key key, @required this.node}) : super(key: key);
+
+  final Function(int) toggleList;
+
+  const ZefyrList({Key key, @required this.node, this.toggleList}) : super(key: key);
 
   final BlockNode node;
 
   @override
   Widget build(BuildContext context) {
     final theme = ZefyrTheme.of(context);
+
     List<Widget> items = [];
-    int index = 1;
+    int index = 0;
     for (var line in node.children) {
-      items.add(_buildItem(line, index));
+      items.add(_buildItem(line, index, node.style.get(NotusAttribute.block) == NotusAttribute.block.checklistChecked));
       index++;
     }
 
@@ -38,36 +42,19 @@ class ZefyrList extends StatelessWidget {
     );
   }
 
-  Widget _buildItem(Node node, int index) {
+  Widget _buildItem(Node node, int index, bool checked) {
     LineNode line = node;
-    return new ZefyrListItem(index: index, node: line);
+    return new ZefyrListItem(index: index, node: line, isChecked: checked, onChecked: toggleList);
   }
 }
 
-class ZefyrListItem extends StatefulWidget {
+class ZefyrListItem extends StatelessWidget {
   final int index;
   final LineNode node;
-  ZefyrListItem({Key key, this.index, this.node}) : super(key: key);
+  final bool isChecked;
+  final Function(int) onChecked;
 
-  _ZefyrListItemState createState() => _ZefyrListItemState();
-}
-
-class _ZefyrListItemState extends State<ZefyrListItem> {
-  int index;
-  LineNode node;
-  bool isChecked = false;
-
-  @override
-  void initState() {
-    index = widget.index;
-    node = widget.node;
-    final BlockNode block = node.parent;
-    final style = block.style.get(NotusAttribute.block);
-    if (style == NotusAttribute.block.checklistChecked || style == NotusAttribute.block.checklistUnchecked) {
-      isChecked = (style == NotusAttribute.block.checklistChecked) ? true : false;
-    }
-    super.initState();
-  }
+  ZefyrListItem({Key key, this.isChecked = false, this.index, this.node, this.onChecked}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +62,7 @@ class _ZefyrListItemState extends State<ZefyrListItem> {
       print('Contains Text Color');
     }
     final BlockNode block = node.parent;
-    final style = block.style.get(NotusAttribute.block);
+    final style = block?.style?.get(NotusAttribute.block);
     final TextAlign textAlign = (node.style.contains(NotusAttribute.alignment)) ? _getTextAlign(node.style) : TextAlign.start;
     final theme = ZefyrTheme.of(context);
     final bulletText =
@@ -107,7 +94,9 @@ class _ZefyrListItemState extends State<ZefyrListItem> {
         SizedBox(width: 24.0, child: Text(bulletText, style: textStyle)) :
         SizedBox(width: 28.0, child: Padding(
           padding: const EdgeInsets.only(right: 4.0),
-          child: ChecklistItemBox(isChecked: isChecked, onToggle: toggleCheckbox,)),
+          child: ChecklistItemBox(isChecked: isChecked, onToggle: () {
+            onChecked(index);
+          })),
         );
     if (padding != null) {
       bullet = Padding(padding: padding, child: bullet);
@@ -134,11 +123,5 @@ class _ZefyrListItemState extends State<ZefyrListItem> {
       return true;
     }
     return false;
-  }
-
-  void toggleCheckbox() {
-    setState(() {
-      isChecked = !isChecked;
-    });
   }
 }

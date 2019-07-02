@@ -180,18 +180,18 @@ class _ZefyrButtonState extends State<ZefyrButton> {
   }
 
   void _toggleAttribute(NotusAttribute attribute, ZefyrScope editor) {
-    // final isToggled = editor.toggledStyles.contains(attribute);
-    // if (isToggled) {
-    //   editor.toggleOffStyle(attribute);
-    // } else {
-    //   editor.toggleOnStyle(attribute);
-    // }
+    final isToggled = editor.toggledStyles.contains(attribute);
+    if (isToggled) {
+      editor.toggleOffStyle(attribute);
+    } else {
+      editor.toggleOnStyle(attribute);
+    }
     var isTextToggled = editor.selectionStyle.containsSame(attribute);
     if (isTextToggled) {
-      //editor.toggleOffStyle(attribute);
+      editor.toggleOffStyle(attribute);
       (storedTextSelection == null) ? editor.formatSelection(attribute.unset) : editor.formatSelection(attribute.unset, selectedText: storedTextSelection);
     } else {
-      //editor.toggleOnStyle(attribute);
+      editor.toggleOnStyle(attribute);
       (storedTextSelection == null) ? editor.formatSelection(attribute) : editor.formatSelection(attribute, selectedText: storedTextSelection);
     }
     storedTextSelection = null;

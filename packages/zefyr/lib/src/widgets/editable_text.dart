@@ -209,15 +209,20 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
     }
 
     final BlockNode block = node;
+
     final blockStyle = block.style.get(NotusAttribute.block);
     if (blockStyle == NotusAttribute.block.code) {
       return new ZefyrCode(node: block);
     } else if (blockStyle == NotusAttribute.block.bulletList) {
       return new ZefyrList(node: block);
     } else if (blockStyle == NotusAttribute.block.checklistChecked) {
-      return new ZefyrList(node: block);
+      return new ZefyrList(node: block, toggleList: (index){
+        widget.controller.formatText(block.children.elementAt(index).documentOffset, 0, NotusAttribute.block.checklistUnchecked);
+      },);
     } else if (blockStyle == NotusAttribute.block.checklistUnchecked) {
-      return new ZefyrList(node: block);
+      return new ZefyrList(node: block, toggleList: (index) {
+        widget.controller.formatText(block.children.elementAt(index).documentOffset, 0, NotusAttribute.block.checklistChecked);
+      });
     } else if (blockStyle == NotusAttribute.block.numberList) {
       return new ZefyrList(node: block);
     } else if (blockStyle == NotusAttribute.block.quote) {
