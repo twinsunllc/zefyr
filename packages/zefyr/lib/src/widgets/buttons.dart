@@ -137,8 +137,10 @@ class _ZefyrButtonState extends State<ZefyrButton> {
     }
     final isTextToggled = editor.selectionStyle.containsSame(attribute);
     if (isTextToggled) {
+      editor.toggleOffStyle(attribute);
       editor.formatSelection(attribute.unset);
     } else {
+      editor.toggleOnStyle(attribute);
       editor.formatSelection(attribute);
     }
     setState(() {

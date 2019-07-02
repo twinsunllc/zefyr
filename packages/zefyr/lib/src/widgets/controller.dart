@@ -132,6 +132,11 @@ class ZefyrController extends ChangeNotifier {
     notifyListeners();
 
     if (delta != null) {
+      for(var i = 0; i < delta.length; i++){
+        if(delta.elementAt(i).isDelete){
+          _toggledAttributes.clear();
+        }
+      }
       _toggledAttributes.forEach((NotusAttribute attributeToAdd) {
         formatText(index, 1, attributeToAdd);
       });
