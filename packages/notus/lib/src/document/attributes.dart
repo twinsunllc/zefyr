@@ -75,6 +75,11 @@ abstract class NotusAttributeBuilder<T> implements NotusAttributeKey<T> {
 ///   * [NotusAttribute.alignright]
 ///   * [NotusAttribute.alignleft]
 ///   * [NotusAttribute.aligncenter]
+///   * [NotusAttribute.alignjustify]
+///   * [NotusAttribute.size.small]
+///   * [NotusAttribute.size.normal]
+///   * [NotusAttribute.size.large]
+///   * [NotusAttribute.size.huge]
 class NotusAttribute<T> implements NotusAttributeBuilder<T> {
   static final Map<String, NotusAttributeBuilder> _registry = {
     NotusAttribute.bold.key: NotusAttribute.bold,
@@ -83,6 +88,7 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
     NotusAttribute.strikeThrough.key: NotusAttribute.strikeThrough,
     NotusAttribute.link.key: NotusAttribute.link,
     NotusAttribute.heading.key: NotusAttribute.heading,
+    NotusAttribute.size.key: NotusAttribute.size,
     NotusAttribute.alignment.key: NotusAttribute.alignment,
     NotusAttribute.block.key: NotusAttribute.block,
     NotusAttribute.embed.key: NotusAttribute.embed,
@@ -137,6 +143,23 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
 
   /// Alias for [NotusAttribute.attribute.al].
   static NotusAttribute<String> get al => alignment.al;
+
+  /// Alias for [NotusAttribute.attribute.aj].
+  static NotusAttribute<String> get aj => alignment.aj;
+
+  static const size = const SizeAttributeBuilder._();
+
+  /// Alias for [NotusAttribute.size.small].
+  static NotusAttribute<String> get small => size.small;
+
+  /// Alias for [NotusAttribute.size.normal].
+  static NotusAttribute<String> get normal => size.normal;
+
+  /// Alias for [NotusAttribute.size.large].
+  static NotusAttribute<String> get large => size.large;
+
+  /// Alias for [NotusAttribute.size.huge].
+  static NotusAttribute<String> get huge => size.huge;
 
   /// Block attribute
   static const block = const BlockAttributeBuilder._();
@@ -435,6 +458,27 @@ class AlignmentAttributeBuilder extends NotusAttributeBuilder<String> {
 
   /// al alignment, equivalent of `al` in HTML.
   NotusAttribute<String> get al => new NotusAttribute<String>._(key, scope, 'al');
+
+  /// al alignment, equivalent of `aj` in HTML.
+  NotusAttribute<String> get aj => new NotusAttribute<String>._(key, scope, 'aj');
+}
+
+class SizeAttributeBuilder extends NotusAttributeBuilder<String> {
+  static const _kSize = 'size';
+  const SizeAttributeBuilder._()
+      : super._(_kSize, NotusAttributeScope.inline);
+
+  /// ac alignment, equivalent of `small` in HTML.
+  NotusAttribute<String> get small => new NotusAttribute<String>._(key, NotusAttributeScope.inline, 'small');
+
+  /// ar alignment, equivalent of `normal` in HTML.
+  NotusAttribute<String> get normal => new NotusAttribute<String>._(key, NotusAttributeScope.inline, 'normal');
+
+  /// al alignment, equivalent of `large` in HTML.
+  NotusAttribute<String> get large => new NotusAttribute<String>._(key, NotusAttributeScope.inline, 'large');
+
+  /// al alignment, equivalent of `huge` in HTML.
+  NotusAttribute<String> get huge => new NotusAttribute<String>._(key, NotusAttributeScope.inline, 'huge');
 }
 
 /// Builder for block attribute styles (number/bullet lists, code and quote).

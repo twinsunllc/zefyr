@@ -58,6 +58,9 @@ class ZefyrThemeData {
   final TextStyle italicStyle;
   final TextStyle strikeThroughStyle;
   final TextStyle linkStyle;
+  final TextStyle smallSizeStyle;
+  final TextStyle largeSizeStyle;
+  final TextStyle hugeSizeStyle;
   final TextStyle strikeThrough;
   final StyleTheme paragraphTheme;
   final HeadingTheme headingTheme;
@@ -84,6 +87,9 @@ class ZefyrThemeData {
     final strikeThroughStyle = paragraphStyle.copyWith(decoration: TextDecoration.lineThrough);
     final linkStyle =
         TextStyle(color: Colors.blue, decoration: TextDecoration.underline);
+    final smallSizeStyle = new TextStyle(fontSize: 13.0);
+    final largeSizeStyle = new TextStyle(fontSize: 24.0);
+    final hugeSizeStyle = new TextStyle(fontSize: 34.0);
     final strikeThrough = paragraphStyle.copyWith(decoration: TextDecoration.lineThrough);
 
     return new ZefyrThemeData(
@@ -92,6 +98,9 @@ class ZefyrThemeData {
       italicStyle: italicStyle,
       strikeThroughStyle: strikeThroughStyle,
       linkStyle: linkStyle,
+      smallSizeStyle: smallSizeStyle,
+      largeSizeStyle: largeSizeStyle,
+      hugeSizeStyle: hugeSizeStyle,
       strikeThrough: strikeThrough,
       paragraphTheme:
           new StyleTheme(textStyle: paragraphStyle, padding: padding),
@@ -110,6 +119,9 @@ class ZefyrThemeData {
     this.italicStyle,
     this.strikeThroughStyle,
     this.linkStyle,
+    this.smallSizeStyle,
+    this.largeSizeStyle,
+    this.hugeSizeStyle,
     this.strikeThrough,
     this.paragraphTheme,
     this.headingTheme,
@@ -127,6 +139,9 @@ class ZefyrThemeData {
     TextStyle italicStyle,
     TextStyle strikeThroughStyle,
     TextStyle linkStyle,
+    TextStyle smallSizeStyle,
+    TextStyle largeSizeStyle,
+    TextStyle hugeSizeStyle,
     TextStyle strikeThrough,
     StyleTheme paragraphTheme,
     HeadingTheme headingTheme,
@@ -142,6 +157,9 @@ class ZefyrThemeData {
       italicStyle: italicStyle ?? this.italicStyle,
       strikeThroughStyle: strikeThroughStyle ?? this.strikeThroughStyle,
       linkStyle: linkStyle ?? this.linkStyle,
+      smallSizeStyle: smallSizeStyle ?? this.smallSizeStyle,
+      largeSizeStyle: largeSizeStyle ?? this.largeSizeStyle,
+      hugeSizeStyle: hugeSizeStyle ?? this.hugeSizeStyle,
       strikeThrough: strikeThrough ?? this.strikeThrough,
       paragraphTheme: paragraphTheme ?? this.paragraphTheme,
       headingTheme: headingTheme ?? this.headingTheme,
@@ -160,6 +178,9 @@ class ZefyrThemeData {
       italicStyle: other.italicStyle,
       strikeThroughStyle: strikeThroughStyle,
       linkStyle: other.linkStyle,
+      smallSizeStyle: other.smallSizeStyle,
+      largeSizeStyle: other.largeSizeStyle,
+      hugeSizeStyle: other.hugeSizeStyle,
       strikeThrough: other.strikeThrough,
       paragraphTheme: other.paragraphTheme,
       headingTheme: other.headingTheme,

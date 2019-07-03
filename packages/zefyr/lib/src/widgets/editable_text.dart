@@ -237,6 +237,10 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
       return TextAlign.center;
     } else if (_doesContainAttribute(style, NotusAttribute.alignment.ar)) {
       return TextAlign.right;
+    } else if (_doesContainAttribute(style, NotusAttribute.alignment.al)) {
+      return TextAlign.left;
+    } else if (_doesContainAttribute(style, NotusAttribute.alignment.al)) {
+      return TextAlign.justify;
     }
     return TextAlign.start;
   }

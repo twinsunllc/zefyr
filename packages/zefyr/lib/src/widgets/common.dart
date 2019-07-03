@@ -155,6 +155,18 @@ class _RawZefyrLineState extends State<RawZefyrLine> {
     if (style.contains(NotusAttribute.link)) {
       result = result.merge(theme.linkStyle);
     }
+    if (style.containsSame(NotusAttribute.size.small)) {
+      result = result.merge(theme.smallSizeStyle);
+    }
+    if (style.containsSame(NotusAttribute.size.normal)) {
+      result = result;
+    }
+    if (style.containsSame(NotusAttribute.size.large)) {
+      result = result.merge(theme.largeSizeStyle);
+    }
+    if (style.containsSame(NotusAttribute.size.huge)) {
+      result = result.merge(theme.hugeSizeStyle);
+    }
     if (style.contains(NotusAttribute.textColor)) {
       NotusAttribute<String> attribute = style.get(NotusAttribute.textColor);
       if (attribute != null && attribute.value != null) {
@@ -176,7 +188,7 @@ class _RawZefyrLineState extends State<RawZefyrLine> {
     }
 
     List<int> rgbValues = _parseOutRgbValues(value);
-    return Color.fromRGBO(rgbValues[0], rgbValues[1], rgbValues[2], 1.0);
+    return Color.fromRGBO(rgbValues[0], rgbValues[1], rgbValues[2], 0.9);
   }
 
   List<int> _parseOutRgbValues(String value) {

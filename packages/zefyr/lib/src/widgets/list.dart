@@ -58,6 +58,7 @@ class ZefyrListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int numberIndex = index + 1;
     if (node.style.contains(NotusAttribute.textColor)) {
       print('Contains Text Color');
     }
@@ -66,7 +67,7 @@ class ZefyrListItem extends StatelessWidget {
     final TextAlign textAlign = (node.style.contains(NotusAttribute.alignment)) ? _getTextAlign(node.style) : TextAlign.start;
     final theme = ZefyrTheme.of(context);
     final bulletText =
-        (style == NotusAttribute.block.bulletList) ? '•' : (style == NotusAttribute.block.numberList) ? '$index.' : '•';
+        (style == NotusAttribute.block.bulletList) ? '•' : (style == NotusAttribute.block.numberList) ? '$numberIndex.' : '•';
 
     TextStyle textStyle;
     Widget content;
@@ -114,6 +115,10 @@ class ZefyrListItem extends StatelessWidget {
       return TextAlign.center;
     } else if (_doesContainAttribute(style, NotusAttribute.alignment.ar)) {
       return TextAlign.right;
+    } else if (_doesContainAttribute(style, NotusAttribute.alignment.al)) {
+      return TextAlign.left;
+    } else if (_doesContainAttribute(style, NotusAttribute.alignment.al)) {
+      return TextAlign.justify;
     }
     return TextAlign.start;
   }

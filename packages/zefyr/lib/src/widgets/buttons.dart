@@ -23,6 +23,7 @@ Color fromHexString(String hexString) => Color(
                               ).withOpacity(1.0);
 
   List<Color> pickerColors = [
+  Colors.white,
   fromHexString('#000000'),
   fromHexString('#ab3a72'),
   fromHexString('#ff5cc7'),
@@ -215,7 +216,7 @@ class _ZefyrButtonState extends State<ZefyrButton> {
           contentPadding: EdgeInsets.all(0.0),
           content: SingleChildScrollView(
             child: GridPicker(
-              pickerColor: Colors.black,
+              pickerColor: (isTextColorAttribute) ? Colors.black : Colors.white,
               onColorChanged: (Color color) {
                 Navigator.pop(context);
                 onColorChanged(color);
@@ -308,11 +309,11 @@ class _HeadingButtonState extends State<HeadingButton> {
   @override
   Widget build(BuildContext context) {
     final toolbar = ZefyrToolbar.of(context);
-    return toolbar.buildButton(
-      context,
-      ZefyrToolbarAction.heading,
-      onPressed: showOverlay,
-    );
+    // return toolbar.buildButton(
+    //   context,
+    //   ZefyrToolbarAction.heading,
+    //   onPressed: showOverlay,
+    // );
   }
 
   void showOverlay() {
@@ -325,9 +326,7 @@ class _HeadingButtonState extends State<HeadingButton> {
     final buttons = Row(
       children: <Widget>[
         SizedBox(width: 8.0),
-        toolbar.buildButton(context, ZefyrToolbarAction.headingLevel1),
         toolbar.buildButton(context, ZefyrToolbarAction.headingLevel2),
-        toolbar.buildButton(context, ZefyrToolbarAction.headingLevel3),
       ],
     );
     return ZefyrToolbarScaffold(body: buttons);
@@ -365,6 +364,45 @@ class _AlignmentButtonState extends State<AlignmentButton> {
         toolbar.buildButton(context, ZefyrToolbarAction.textAlignLeft),
         toolbar.buildButton(context, ZefyrToolbarAction.textAlignCenter),
         toolbar.buildButton(context, ZefyrToolbarAction.textAlignRight),
+        toolbar.buildButton(context, ZefyrToolbarAction.textAlignJustify),
+      ],
+    );
+    return ZefyrToolbarScaffold(body: buttons);
+  }
+}
+
+class SizeButton extends StatefulWidget {
+  const SizeButton({Key key}) : super(key: key);
+
+  @override
+  _SizeButtonState createState() => _SizeButtonState();
+}
+
+class _SizeButtonState extends State<SizeButton> {
+  @override
+  Widget build(BuildContext context) {
+    final toolbar = ZefyrToolbar.of(context);
+    return toolbar.buildButton(
+      context,
+      ZefyrToolbarAction.size,
+      onPressed: showOverlay,
+    );
+  }
+
+  void showOverlay() {
+    final toolbar = ZefyrToolbar.of(context);
+    toolbar.showOverlay(buildOverlay);
+  }
+
+  Widget buildOverlay(BuildContext context) {
+    final toolbar = ZefyrToolbar.of(context);
+    final buttons = Row(
+      children: <Widget>[
+        SizedBox(width: 12.0),
+        toolbar.buildButton(context, ZefyrToolbarAction.sizeSmall),
+        toolbar.buildButton(context, ZefyrToolbarAction.sizeNormal),
+        toolbar.buildButton(context, ZefyrToolbarAction.sizeLarge),
+        toolbar.buildButton(context, ZefyrToolbarAction.sizeHuge),
       ],
     );
     return ZefyrToolbarScaffold(body: buttons);
@@ -449,11 +487,11 @@ class _LinkButtonState extends State<LinkButton> {
     final enabled =
         hasLink(editor.selectionStyle) || !editor.selection.isCollapsed;
 
-    return toolbar.buildButton(
-      context,
-      ZefyrToolbarAction.link,
-      onPressed: enabled ? showOverlay : null,
-    );
+    // return toolbar.buildButton(
+    //   context,
+    //   ZefyrToolbarAction.link,
+    //   onPressed: enabled ? showOverlay : null,
+    // );
   }
 
   bool hasLink(NotusStyle style) => style.contains(NotusAttribute.link);
@@ -582,15 +620,15 @@ class _LinkButtonState extends State<LinkButton> {
       final copyHandler = clipboardEnabled ? copyToClipboard : null;
       final openHandler = hasLink(style) ? openInBrowser : null;
       final buttons = <Widget>[
-        toolbar.buildButton(context, ZefyrToolbarAction.unlink,
-            onPressed: unlinkHandler),
-        toolbar.buildButton(context, ZefyrToolbarAction.clipboardCopy,
-            onPressed: copyHandler),
-        toolbar.buildButton(
-          context,
-          ZefyrToolbarAction.openInBrowser,
-          onPressed: openHandler,
-        ),
+        // toolbar.buildButton(context, ZefyrToolbarAction.unlink,
+        //     onPressed: unlinkHandler),
+        // toolbar.buildButton(context, ZefyrToolbarAction.clipboardCopy,
+        //     onPressed: copyHandler),
+        // toolbar.buildButton(
+        //   context,
+        //   ZefyrToolbarAction.openInBrowser,
+        //   onPressed: openHandler,
+        // ),
       ];
       items.addAll(buttons);
     }
