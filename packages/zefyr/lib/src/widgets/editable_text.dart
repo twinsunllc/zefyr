@@ -39,6 +39,7 @@ class ZefyrEditableText extends StatefulWidget {
     this.enabled: true,
     this.padding: const EdgeInsets.symmetric(horizontal: 16.0),
     this.physics,
+    this.onCheckboxToggled,
   }) : super(key: key);
 
   final ZefyrController controller;
@@ -47,6 +48,7 @@ class ZefyrEditableText extends StatefulWidget {
   final bool autofocus;
   final bool enabled;
   final ScrollPhysics physics;
+  final VoidCallback onCheckboxToggled;
 
   /// Padding around editable area.
   final EdgeInsets padding;
@@ -218,10 +220,12 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
     } else if (blockStyle == NotusAttribute.block.checklistChecked) {
       return new ZefyrList(node: block, toggleList: (index){
         widget.controller.formatText(block.children.elementAt(index).documentOffset, 0, NotusAttribute.block.checklistUnchecked);
+        widget.onCheckboxToggled();
       },);
     } else if (blockStyle == NotusAttribute.block.checklistUnchecked) {
       return new ZefyrList(node: block, toggleList: (index) {
         widget.controller.formatText(block.children.elementAt(index).documentOffset, 0, NotusAttribute.block.checklistChecked);
+        widget.onCheckboxToggled();
       });
     } else if (blockStyle == NotusAttribute.block.numberList) {
       return new ZefyrList(node: block);

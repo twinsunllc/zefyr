@@ -19,6 +19,7 @@ class ZefyrField extends StatefulWidget {
   final ZefyrToolbarDelegate toolbarDelegate;
   final ZefyrImageDelegate imageDelegate;
   final ScrollPhysics physics;
+  final VoidCallback onCheckboxToggled;
 
   const ZefyrField({
     Key key,
@@ -31,6 +32,7 @@ class ZefyrField extends StatefulWidget {
     this.toolbarDelegate,
     this.imageDelegate,
     this.physics,
+    this.onCheckboxToggled,
   }) : super(key: key);
 
   @override
@@ -49,6 +51,7 @@ class _ZefyrFieldState extends State<ZefyrField> {
       toolbarDelegate: widget.toolbarDelegate,
       imageDelegate: widget.imageDelegate,
       physics: widget.physics,
+      onCheckboxToggled: widget.onCheckboxToggled,
     );
 
     if (widget.height != null) {

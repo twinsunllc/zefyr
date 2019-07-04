@@ -24,6 +24,7 @@ class ZefyrEditor extends StatefulWidget {
     this.toolbarDelegate,
     this.imageDelegate,
     this.physics,
+    this.onCheckboxToggled,
   }) : super(key: key);
 
   final ZefyrController controller;
@@ -33,6 +34,7 @@ class ZefyrEditor extends StatefulWidget {
   final ZefyrToolbarDelegate toolbarDelegate;
   final ZefyrImageDelegate imageDelegate;
   final ScrollPhysics physics;
+  final VoidCallback onCheckboxToggled;
 
   /// Padding around editable area.
   final EdgeInsets padding;
@@ -153,6 +155,7 @@ class _ZefyrEditorState extends State<ZefyrEditor> {
       enabled: widget.enabled,
       padding: widget.padding,
       physics: widget.physics,
+      onCheckboxToggled: widget.onCheckboxToggled,
     );
 
     return ZefyrTheme(

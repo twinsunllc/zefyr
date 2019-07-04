@@ -170,7 +170,7 @@ class _RawZefyrLineState extends State<RawZefyrLine> {
     if (style.contains(NotusAttribute.textColor)) {
       NotusAttribute<String> attribute = style.get(NotusAttribute.textColor);
       if (attribute != null && attribute.value != null) {
-        result = result.merge(new TextStyle(color: _getColorFromValue(attribute.value)));
+        result = result.merge(new TextStyle(color: _getColorFromValue(attribute.value, isTextColor: true)));
       }
     }
     if (style.contains(NotusAttribute.backgroundColor)) {
@@ -182,13 +182,13 @@ class _RawZefyrLineState extends State<RawZefyrLine> {
     return result;
   }
 
-  Color _getColorFromValue(String value) {
+  Color _getColorFromValue(String value, {bool isTextColor = false}) {
     if (value == 'black' || value == 'white') {
       return (value == 'black') ? Colors.black : Colors.white;
     }
 
     List<int> rgbValues = _parseOutRgbValues(value);
-    return Color.fromRGBO(rgbValues[0], rgbValues[1], rgbValues[2], 0.9);
+    return Color.fromRGBO(rgbValues[0], rgbValues[1], rgbValues[2], (isTextColor) ?  1.0 : 0.6);
   }
 
   List<int> _parseOutRgbValues(String value) {
