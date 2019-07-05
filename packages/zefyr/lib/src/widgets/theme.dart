@@ -62,6 +62,7 @@ class ZefyrThemeData {
   final TextStyle largeSizeStyle;
   final TextStyle hugeSizeStyle;
   final TextStyle strikeThrough;
+  final TextStyle mainTextStyle;
   final StyleTheme paragraphTheme;
   final HeadingTheme headingTheme;
   final BlockTheme blockTheme;
@@ -130,6 +131,7 @@ class ZefyrThemeData {
     this.cursorColor,
     this.indentSize,
     this.toolbarTheme,
+    this.mainTextStyle,
   });
 
   ZefyrThemeData copyWith({

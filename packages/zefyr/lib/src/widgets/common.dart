@@ -188,7 +188,7 @@ class _RawZefyrLineState extends State<RawZefyrLine> {
     }
 
     List<int> rgbValues = _parseOutRgbValues(value);
-    return Color.fromRGBO(rgbValues[0], rgbValues[1], rgbValues[2], (isTextColor) ?  1.0 : 0.6);
+    return Color.fromRGBO(rgbValues[0], rgbValues[1], rgbValues[2], (isTextColor) ?  1.0 : 1.0);
   }
 
   List<int> _parseOutRgbValues(String value) {
