@@ -25,6 +25,8 @@ class ZefyrEditor extends StatefulWidget {
     this.imageDelegate,
     this.physics,
     this.onCheckboxToggled,
+    this.onSnooze,
+    this.showCheckListDelete,
   }) : super(key: key);
 
   final ZefyrController controller;
@@ -35,6 +37,8 @@ class ZefyrEditor extends StatefulWidget {
   final ZefyrImageDelegate imageDelegate;
   final ScrollPhysics physics;
   final VoidCallback onCheckboxToggled;
+  final Function(DateTime, String, bool) onSnooze;
+  final bool showCheckListDelete;
 
   /// Padding around editable area.
   final EdgeInsets padding;
@@ -156,6 +160,8 @@ class _ZefyrEditorState extends State<ZefyrEditor> {
       padding: widget.padding,
       physics: widget.physics,
       onCheckboxToggled: widget.onCheckboxToggled,
+      onSnooze: widget.onSnooze,
+      showCheckListDelete: widget.showCheckListDelete,
     );
 
     return ZefyrTheme(
