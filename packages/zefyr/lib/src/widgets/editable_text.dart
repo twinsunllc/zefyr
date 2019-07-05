@@ -40,6 +40,8 @@ class ZefyrEditableText extends StatefulWidget {
     this.padding: const EdgeInsets.symmetric(horizontal: 16.0),
     this.physics,
     this.onCheckboxToggled,
+    this.onSnooze,
+    this.showCheckListDelete = false,
   }) : super(key: key);
 
   final ZefyrController controller;
@@ -49,6 +51,8 @@ class ZefyrEditableText extends StatefulWidget {
   final bool enabled;
   final ScrollPhysics physics;
   final VoidCallback onCheckboxToggled;
+  final Function(DateTime, String, bool) onSnooze;
+  final bool showCheckListDelete;
 
   /// Padding around editable area.
   final EdgeInsets padding;
@@ -218,15 +222,36 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
     } else if (blockStyle == NotusAttribute.block.bulletList) {
       return new ZefyrList(node: block);
     } else if (blockStyle == NotusAttribute.block.checklistChecked) {
-      return new ZefyrList(node: block, toggleList: (index){
-        widget.controller.formatText(block.children.elementAt(index).documentOffset, 0, NotusAttribute.block.checklistUnchecked);
-        widget.onCheckboxToggled();
-      },);
+      return new ZefyrList(node: block,
+        toggleList: (index) {
+          widget.controller.formatText(block.children.elementAt(index).documentOffset, 0, NotusAttribute.block.checklistUnchecked);
+          if(widget.onCheckboxToggled != null)
+            widget.onCheckboxToggled();
+        },
+        onSnooze: (date, index){
+          if(widget.onSnooze != null)
+            widget.onSnooze(date, block.children.elementAt(index).toPlainText(), true);
+        },
+        onDelete: widget.showCheckListDelete ? (index){
+          widget.controller.replaceText(block.children.elementAt(index).documentOffset, block.children.elementAt(index).length, '');
+        } : null,
+      );
     } else if (blockStyle == NotusAttribute.block.checklistUnchecked) {
-      return new ZefyrList(node: block, toggleList: (index) {
-        widget.controller.formatText(block.children.elementAt(index).documentOffset, 0, NotusAttribute.block.checklistChecked);
-        widget.onCheckboxToggled();
-      });
+      return new ZefyrList(node: block,
+        toggleList: (index) {
+          widget.controller.formatText(block.children.elementAt(index).documentOffset, 0, NotusAttribute.block.checklistChecked);
+          if(widget.onCheckboxToggled != null)
+            widget.onCheckboxToggled();
+        },
+        onSnooze: (date, index){
+          print('snoozing ${block.children.elementAt(index).toPlainText()}');
+          if(widget.onSnooze != null)
+            widget.onSnooze(date, block.children.elementAt(index).toPlainText(), false);
+        },
+        onDelete: widget.showCheckListDelete ? (index){
+           widget.controller.replaceText(block.children.elementAt(index).documentOffset, block.children.elementAt(index).length, '');
+        } : null,
+      );
     } else if (blockStyle == NotusAttribute.block.numberList) {
       return new ZefyrList(node: block);
     } else if (blockStyle == NotusAttribute.block.quote) {

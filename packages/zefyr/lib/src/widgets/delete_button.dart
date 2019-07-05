@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:zefyr/views/helpers/artful_agenda_icons.dart';
 
-class ChecklistItemBox extends StatelessWidget {
-  final bool isChecked;
-  final VoidCallback onToggle;
+class DeleteButton extends StatelessWidget {
+  final VoidCallback onDelete;
 
-  ChecklistItemBox({this.isChecked, this.onToggle});
+  DeleteButton({this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +14,14 @@ class ChecklistItemBox extends StatelessWidget {
         children: [
           Listener(
             onPointerDown: (event){
-              print("check box has been tapped");
-              onToggle();
+              print("delete has been tapped");
+              onDelete();
             },
             child: InkWell(
               borderRadius: BorderRadius.circular(20.0),
               child: Padding(
                 padding: const EdgeInsets.all(1.0),
-                child: isChecked
-                    ? Icon(ArtfulAgenda.check_closed, size: 18.0, color: Colors.grey[400])
-                    : Icon(ArtfulAgenda.check_open, size: 18.0, color: Colors.grey[400]),
+                child: Icon(Icons.delete, size: 18.0, color: Colors.grey[400])
               ),
             ),
           ),

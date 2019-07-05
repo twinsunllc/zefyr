@@ -4,6 +4,8 @@
 import 'package:flutter/material.dart';
 import 'package:notus/notus.dart';
 import 'package:zefyr/src/widgets/checklist_item_box.dart';
+import 'package:zefyr/src/widgets/delete_button.dart';
+import 'package:zefyr/src/widgets/snooze_button.dart';
 
 import 'common.dart';
 import 'paragraph.dart';
@@ -12,9 +14,10 @@ import 'theme.dart';
 /// Represents number lists and bullet lists in a Zefyr editor.
 class ZefyrList extends StatelessWidget {
 
-  final Function(int) toggleList;
+  final Function(int) toggleList, onDelete;
+  final Function(DateTime, int) onSnooze;
 
-  const ZefyrList({Key key, @required this.node, this.toggleList}) : super(key: key);
+  const ZefyrList({Key key, @required this.node, this.toggleList, this.onSnooze, this.onDelete}) : super(key: key);
 
   final BlockNode node;
 
@@ -44,7 +47,7 @@ class ZefyrList extends StatelessWidget {
 
   Widget _buildItem(Node node, int index, bool checked) {
     LineNode line = node;
-    return new ZefyrListItem(index: index, node: line, isChecked: checked, onChecked: toggleList);
+    return new ZefyrListItem(index: index, node: line, isChecked: checked, onChecked: toggleList, onSnooze: onSnooze, onDelete: onDelete,);
   }
 }
 
@@ -52,9 +55,10 @@ class ZefyrListItem extends StatelessWidget {
   final int index;
   final LineNode node;
   final bool isChecked;
-  final Function(int) onChecked;
+  final Function(int) onChecked, onDelete;
+  final Function(DateTime, int) onSnooze;
 
-  ZefyrListItem({Key key, this.isChecked = false, this.index, this.node, this.onChecked}) : super(key: key);
+  ZefyrListItem({Key key, this.isChecked = false, this.index, this.node, this.onChecked, this.onSnooze, this.onDelete}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -103,10 +107,34 @@ class ZefyrListItem extends StatelessWidget {
       bullet = Padding(padding: padding, child: bullet);
     }
 
+    Widget snoozeButton = (onSnooze == null) ? Container() : SizedBox(width: 28.0, child: Padding(
+          padding: const EdgeInsets.only(right: 4.0),
+          child: SnoozeButton(onSnooze: (DateTime snoozeDate) {
+            if(onSnooze != null){
+              onSnooze(snoozeDate, index);
+            }
+          })),
+        );
+    if (padding != null) {
+      bullet = Padding(padding: padding, child: bullet);
+    }
+
+    Widget deleteButton = (onDelete == null) ? Container() : SizedBox(width: 28.0, child: Padding(
+          padding: const EdgeInsets.only(right: 4.0),
+          child: DeleteButton(onDelete: () {
+            if(onDelete != null){
+              onDelete(index);
+            }
+          })),
+        );
+    if (padding != null) {
+      bullet = Padding(padding: padding, child: bullet);
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[bullet, Expanded(child: content)],
+      children: <Widget>[bullet, Expanded(child: content), snoozeButton, deleteButton],
     );
   }
 
