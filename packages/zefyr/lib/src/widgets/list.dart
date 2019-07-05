@@ -40,7 +40,7 @@ class ZefyrList extends StatelessWidget {
     padding = padding.copyWith(left: theme.indentSize);
 
     return new Padding(
-      padding: padding,
+      padding: EdgeInsets.all(0.0),
       child: new Column(children: items),
     );
   }
@@ -96,7 +96,7 @@ class ZefyrListItem extends StatelessWidget {
     }
 
     Widget bullet = (style != NotusAttribute.block.checklistChecked && style != NotusAttribute.block.checklistUnchecked) ?
-        SizedBox(width: 24.0, child: Text(bulletText, style: textStyle)) :
+        SizedBox(width: 28.0, child: Text(bulletText, style: textStyle)) :
         SizedBox(width: 28.0, child: Padding(
           padding: const EdgeInsets.only(right: 4.0),
           child: ChecklistItemBox(isChecked: isChecked, onToggle: () {
