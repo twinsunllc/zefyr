@@ -36,7 +36,7 @@ class ZefyrField extends StatefulWidget {
     this.physics,
     this.onCheckboxToggled,
     this.onSnooze,
-    this.showCheckListDelete,
+    this.showCheckListDelete = false,
   }) : super(key: key);
 
   @override
