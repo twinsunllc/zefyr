@@ -34,8 +34,7 @@ class ZefyrRichText extends LeafRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(
-      BuildContext context, RenderZefyrParagraph renderObject) {
+  void updateRenderObject(BuildContext context, RenderZefyrParagraph renderObject) {
     renderObject
       ..text = text
       ..node = node
@@ -43,8 +42,7 @@ class ZefyrRichText extends LeafRenderObjectWidget {
   }
 }
 
-class RenderZefyrParagraph extends RenderParagraph
-    implements RenderEditableBox {
+class RenderZefyrParagraph extends RenderParagraph implements RenderEditableBox {
   RenderZefyrParagraph(
     TextSpan text, {
     @required LineNode node,
@@ -78,7 +76,13 @@ class RenderZefyrParagraph extends RenderParagraph
   }
 
   @override
-  double get preferredLineHeight => _prototypePainter.height;
+  double get preferredLineHeight {
+    try {
+      return _prototypePainter.height;
+    } catch (e) {
+      return 0.0;
+    }
+  }
 
   @override
   SelectionOrder get selectionOrder => SelectionOrder.background;
@@ -90,8 +94,7 @@ class RenderZefyrParagraph extends RenderParagraph
     int nodeBase = node.documentOffset;
     int nodeExtent = nodeBase + node.length;
     int base = math.max(0, documentSelection.baseOffset - nodeBase);
-    int extent =
-        math.min(documentSelection.extentOffset, nodeExtent) - nodeBase;
+    int extent = math.min(documentSelection.extentOffset, nodeExtent) - nodeBase;
     return documentSelection.copyWith(baseOffset: base, extentOffset: extent);
   }
 
@@ -168,14 +171,12 @@ class RenderZefyrParagraph extends RenderParagraph
       final box = result.first;
       final dx = isBaseShifted == -1 ? box.right : box.left;
       result.removeAt(0);
-      result.insert(0,
-          new ui.TextBox.fromLTRBD(dx, box.top, dx, box.bottom, box.direction));
+      result.insert(0, new ui.TextBox.fromLTRBD(dx, box.top, dx, box.bottom, box.direction));
     }
     if (isExtentShifted) {
       final box = result.last;
       result.removeLast;
-      result.add(new ui.TextBox.fromLTRBD(
-          box.left, box.top, box.left, box.bottom, box.direction));
+      result.add(new ui.TextBox.fromLTRBD(box.left, box.top, box.left, box.bottom, box.direction));
     }
     return result;
   }
@@ -194,8 +195,7 @@ class RenderZefyrParagraph extends RenderParagraph
   @override
   void performLayout() {
     super.performLayout();
-    _prototypePainter.layout(
-        minWidth: constraints.minWidth, maxWidth: constraints.maxWidth);
+    _prototypePainter.layout(minWidth: constraints.minWidth, maxWidth: constraints.maxWidth);
   }
 
   @override
@@ -216,8 +216,7 @@ class RenderZefyrParagraph extends RenderParagraph
 
   TextSelection _lastPaintedSelection;
   @override
-  void paintSelection(PaintingContext context, Offset offset,
-      TextSelection selection, Color selectionColor) {
+  void paintSelection(PaintingContext context, Offset offset, TextSelection selection, Color selectionColor) {
     if (_lastPaintedSelection != selection) {
       _selectionRects = null;
     }
