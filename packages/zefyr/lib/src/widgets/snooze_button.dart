@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zefyr/views/helpers/artful_agenda_icons.dart';
 
 class SnoozeButton extends StatelessWidget {
   final Function(DateTime) onSnooze;
@@ -33,7 +34,7 @@ class SnoozeButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(20.0),
               child: Padding(
                 padding: const EdgeInsets.all(1.0),
-                child: Icon(Icons.calendar_today, size: 18.0, color: Colors.grey[400])
+                child: Icon(ArtfulAgenda.clock_open, size: 18.0, color: Colors.grey[400])
               ),
             ),
           ),

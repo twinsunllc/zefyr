@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zefyr/views/helpers/artful_agenda_icons.dart';
 
 class DeleteButton extends StatelessWidget {
   final VoidCallback onDelete;
@@ -21,7 +22,7 @@ class DeleteButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(20.0),
               child: Padding(
                 padding: const EdgeInsets.all(1.0),
-                child: Icon(Icons.delete, size: 18.0, color: Colors.grey[400])
+                child: Icon(ArtfulAgenda.trash_empty, size: 18.0, color: Colors.grey[400])
               ),
             ),
           ),
