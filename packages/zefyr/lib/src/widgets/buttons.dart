@@ -171,11 +171,13 @@ class _ZefyrButtonState extends State<ZefyrButton> {
         }
         return () => _toggleAttribute(attribute, editor);
       }
-    } else if (widget.action == ZefyrToolbarAction.close) {
+    } 
+    else if (widget.action == ZefyrToolbarAction.close) {
       return () => toolbar.closeOverlay();
-    } else if (widget.action == ZefyrToolbarAction.hideKeyboard) {
-      return () => editor.hideKeyboard();
-    }
+    } 
+    // else if (widget.action == ZefyrToolbarAction.hideKeyboard) {
+    //   return () => editor.hideKeyboard();
+    // }
 
     return null;
   }
@@ -222,7 +224,7 @@ class _ZefyrButtonState extends State<ZefyrButton> {
                 onColorChanged(color);
               },
               enableLabel: false,
-              showHexInput: true,
+              showHexInput: false,
               availableColors: pickerColors,
             ),
           ),
@@ -277,19 +279,17 @@ class RawZefyrButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final width = theme.buttonTheme.constraints.minHeight + 4.0;
-    final constraints = theme.buttonTheme.constraints.copyWith(
-        minWidth: width, maxHeight: theme.buttonTheme.constraints.minHeight);
+    final constraints = theme.buttonTheme.constraints.copyWith(minWidth: width, maxHeight: theme.buttonTheme.constraints.minHeight);
+    // final width = theme.buttonTheme.constraints.minHeight + 0.0;
+    // final constraints = BoxConstraints.tight(Size(30.0, 30.0));
     final radius = BorderRadius.all(Radius.circular(3.0));
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 6.0),
-      child: RawMaterialButton(
-        shape: RoundedRectangleBorder(borderRadius: radius),
-        elevation: 0.0,
-        fillColor: color,
-        constraints: constraints,
-        onPressed: onPressed,
-        child: child,
-      ),
+    return RawMaterialButton(
+      shape: RoundedRectangleBorder(borderRadius: radius),
+      elevation: 0.0,
+      fillColor: color,
+      constraints: constraints,
+      onPressed: onPressed,
+      child: child,
     );
   }
 }
@@ -316,21 +316,21 @@ class _HeadingButtonState extends State<HeadingButton> {
     // );
   }
 
-  void showOverlay() {
-    final toolbar = ZefyrToolbar.of(context);
-    toolbar.showOverlay(buildOverlay);
-  }
+  // void showOverlay() {
+  //   final toolbar = ZefyrToolbar.of(context);
+  //   toolbar.showOverlay(buildOverlay);
+  // }
 
-  Widget buildOverlay(BuildContext context) {
-    final toolbar = ZefyrToolbar.of(context);
-    final buttons = Row(
-      children: <Widget>[
-        SizedBox(width: 8.0),
-        toolbar.buildButton(context, ZefyrToolbarAction.headingLevel2),
-      ],
-    );
-    return ZefyrToolbarScaffold(body: buttons);
-  }
+  // Widget buildOverlay(BuildContext context) {
+  //   final toolbar = ZefyrToolbar.of(context);
+  //   final buttons = Row(
+  //     children: <Widget>[
+  //       SizedBox(width: 8.0),
+  //       toolbar.buildButton(context, ZefyrToolbarAction.headingLevel2),
+  //     ],
+  //   );
+  //   return ZefyrToolbarScaffold(body: buttons);
+  // }
 }
 
 class AlignmentButton extends StatefulWidget {
@@ -358,7 +358,8 @@ class _AlignmentButtonState extends State<AlignmentButton> {
 
   Widget buildOverlay(BuildContext context) {
     final toolbar = ZefyrToolbar.of(context);
-    final buttons = Row(
+    final buttons = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         SizedBox(width: 8.0),
         toolbar.buildButton(context, ZefyrToolbarAction.textAlignLeft),
@@ -379,7 +380,6 @@ class SizeButton extends StatefulWidget {
 }
 
 class _SizeButtonState extends State<SizeButton> {
-  @override
   Widget build(BuildContext context) {
     final toolbar = ZefyrToolbar.of(context);
     return toolbar.buildButton(
@@ -397,12 +397,18 @@ class _SizeButtonState extends State<SizeButton> {
   Widget buildOverlay(BuildContext context) {
     final toolbar = ZefyrToolbar.of(context);
     final buttons = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        SizedBox(width: 12.0),
         toolbar.buildButton(context, ZefyrToolbarAction.sizeSmall),
+        SizedBox(width: 10.0,),
         toolbar.buildButton(context, ZefyrToolbarAction.sizeNormal),
+        SizedBox(width: 10.0,),
         toolbar.buildButton(context, ZefyrToolbarAction.sizeLarge),
+        SizedBox(width: 10.0,),
         toolbar.buildButton(context, ZefyrToolbarAction.sizeHuge),
+        SizedBox(width: 10.0,),
+        toolbar.buildButton(context, ZefyrToolbarAction.close),
       ],
     );
     return ZefyrToolbarScaffold(body: buttons);
@@ -431,24 +437,24 @@ class _SizeButtonState extends State<SizeButton> {
 //     );
 //   }
 
-//   void showOverlay() {
-//     final toolbar = ZefyrToolbar.of(context);
-//     toolbar.showOverlay(buildOverlay);
-//   }
+  // void showOverlay() {
+  //   final toolbar = ZefyrToolbar.of(context);
+  //   toolbar.showOverlay(buildOverlay);
+  // }
 
-//   Widget buildOverlay(BuildContext context) {
-//     final toolbar = ZefyrToolbar.of(context);
-//     final buttons = Row(
-//       children: <Widget>[
-//         SizedBox(width: 8.0),
-//         toolbar.buildButton(context, ZefyrToolbarAction.cameraImage,
-//             onPressed: _pickFromCamera),
-//         toolbar.buildButton(context, ZefyrToolbarAction.galleryImage,
-//             onPressed: _pickFromGallery),
-//       ],
-//     );
-//     return ZefyrToolbarScaffold(body: buttons);
-//   }
+  // Widget buildOverlay(BuildContext context) {
+  //   final toolbar = ZefyrToolbar.of(context);
+  //   final buttons = Row(
+  //     children: <Widget>[
+  //       // SizedBox(width: 8.0),
+  //       // toolbar.buildButton(context, ZefyrToolbarAction.cameraImage,
+  //       //     onPressed: _pickFromCamera),
+  //       // toolbar.buildButton(context, ZefyrToolbarAction.galleryImage,
+  //       //     onPressed: _pickFromGallery),
+  //     ],
+  //   );
+  //   return ZefyrToolbarScaffold(body: buttons);
+  // }
 
 //   void _pickFromCamera() async {
 //     final editor = ZefyrToolbar.of(context).editor;
@@ -505,15 +511,15 @@ class _LinkButtonState extends State<LinkButton> {
     return defaultValue;
   }
 
-  void showOverlay() {
-    final toolbar = ZefyrToolbar.of(context);
-    toolbar.showOverlay(buildOverlay).whenComplete(cancelEdit);
-  }
+  // void showOverlay() {
+  //   final toolbar = ZefyrToolbar.of(context);
+  //   toolbar.showOverlay(buildOverlay).whenComplete(cancelEdit);
+  // }
 
-  void closeOverlay() {
-    final toolbar = ZefyrToolbar.of(context);
-    toolbar.closeOverlay();
-  }
+  // void closeOverlay() {
+  //   final toolbar = ZefyrToolbar.of(context);
+  //   //toolbar.closeOverlay();
+  // }
 
   void edit() {
     final toolbar = ZefyrToolbar.of(context);
@@ -571,7 +577,7 @@ class _LinkButtonState extends State<LinkButton> {
   void unlink() {
     final editor = ZefyrToolbar.of(context).editor;
     editor.formatSelection(NotusAttribute.link.unset);
-    closeOverlay();
+    //closeOverlay();
   }
 
   void copyToClipboard() {
@@ -598,53 +604,53 @@ class _LinkButtonState extends State<LinkButton> {
     });
   }
 
-  Widget buildOverlay(BuildContext context) {
-    final toolbar = ZefyrToolbar.of(context);
-    final style = toolbar.editor.selectionStyle;
+  // Widget buildOverlay(BuildContext context) {
+  //   // final toolbar = ZefyrToolbar.of(context);
+  //   // final style = toolbar.editor.selectionStyle;
 
-    String value = 'Tap to edit link';
-    if (style.contains(NotusAttribute.link)) {
-      value = style.value(NotusAttribute.link);
-    }
-    final clipboardEnabled = value != 'Tap to edit link';
-    final body = !isEditing
-        ? _LinkView(value: value, onTap: edit)
-        : _LinkInput(
-            key: _inputKey,
-            controller: _inputController,
-            formatError: _formatError,
-          );
-    final items = <Widget>[Expanded(child: body)];
-    if (!isEditing) {
-      final unlinkHandler = hasLink(style) ? unlink : null;
-      final copyHandler = clipboardEnabled ? copyToClipboard : null;
-      final openHandler = hasLink(style) ? openInBrowser : null;
-      final buttons = <Widget>[
-        // toolbar.buildButton(context, ZefyrToolbarAction.unlink,
-        //     onPressed: unlinkHandler),
-        // toolbar.buildButton(context, ZefyrToolbarAction.clipboardCopy,
-        //     onPressed: copyHandler),
-        // toolbar.buildButton(
-        //   context,
-        //   ZefyrToolbarAction.openInBrowser,
-        //   onPressed: openHandler,
-        // ),
-      ];
-      items.addAll(buttons);
-    }
-    final trailingPressed = isEditing ? doneEdit : closeOverlay;
-    final trailingAction =
-        isEditing ? ZefyrToolbarAction.confirm : ZefyrToolbarAction.close;
+  //   // String value = 'Tap to edit link';
+  //   // if (style.contains(NotusAttribute.link)) {
+  //   //   value = style.value(NotusAttribute.link);
+  //   // }
+  //   // final clipboardEnabled = value != 'Tap to edit link';
+  //   // final body = !isEditing
+  //   //     ? _LinkView(value: value, onTap: edit)
+  //   //     : _LinkInput(
+  //   //         key: _inputKey,
+  //   //         controller: _inputController,
+  //   //         formatError: _formatError,
+  //   //       );
+  //   // final items = <Widget>[Expanded(child: body)];
+  //   // if (!isEditing) {
+  //   //   final unlinkHandler = hasLink(style) ? unlink : null;
+  //   //   final copyHandler = clipboardEnabled ? copyToClipboard : null;
+  //   //   final openHandler = hasLink(style) ? openInBrowser : null;
+  //   //   final buttons = <Widget>[
+  //   //     // toolbar.buildButton(context, ZefyrToolbarAction.unlink,
+  //   //     //     onPressed: unlinkHandler),
+  //   //     // toolbar.buildButton(context, ZefyrToolbarAction.clipboardCopy,
+  //   //     //     onPressed: copyHandler),
+  //   //     // toolbar.buildButton(
+  //   //     //   context,
+  //   //     //   ZefyrToolbarAction.openInBrowser,
+  //   //     //   onPressed: openHandler,
+  //   //     // ),
+  //   //   ];
+  //   //   items.addAll(buttons);
+  //   // }
+  //   //final trailingPressed = isEditing ? doneEdit : closeOverlay;
+  //   //final trailingAction =
+  //       //isEditing ? ZefyrToolbarAction.confirm : ZefyrToolbarAction.close;
 
-    return ZefyrToolbarScaffold(
-      body: Row(children: items),
-      trailing: toolbar.buildButton(
-        context,
-        trailingAction,
-        onPressed: trailingPressed,
-      ),
-    );
-  }
+  //   // return ZefyrToolbarScaffold(
+  //   //   body: Row(children: items),
+  //   //   trailing: toolbar.buildButton(
+  //   //     context,
+  //   //     trailingAction,
+  //   //     onPressed: trailingPressed,
+  //   //   ),
+  //   // );
+  // }
 }
 
 class _LinkInput extends StatefulWidget {
@@ -684,13 +690,13 @@ class _LinkInputState extends State<_LinkInput> {
     }
   }
 
-  // @override
-  // void dispose() {
-  //   _editor?.toolbarFocusNode = null;
-  //   _focusNode.dispose();
-  //   _editor = null;
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    _editor?.toolbarFocusNode = null;
+    _focusNode.dispose();
+    _editor = null;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -28,7 +28,6 @@ enum ZefyrToolbarAction {
   sizeNormal,
   sizeLarge,
   sizeHuge,
-  unlink,
   //clipboardCopy,
   //openInBrowser,
   //heading,
@@ -44,9 +43,8 @@ enum ZefyrToolbarAction {
   // image,
   // cameraImage,
   // galleryImage,
-  hideKeyboard,
+  //hideKeyboard,
   close,
-  confirm,
 }
 
 final kZefyrToolbarAttributeActions = <ZefyrToolbarAction, NotusAttributeKey>{
@@ -106,17 +104,18 @@ class ZefyrToolbarScaffold extends StatelessWidget {
     final constraints =
         BoxConstraints.tightFor(height: ZefyrToolbar.kToolbarHeight);
     final children = <Widget>[
-      Expanded(child: body),
+      body,
     ];
 
     if (trailing != null) {
       children.add(trailing);
-    } else if (autoImplyTrailing) {
-      children.add(toolbar.buildButton(context, ZefyrToolbarAction.close));
-    }
+    } 
+    // else if (autoImplyTrailing) {
+    //   children.add(toolbar.buildButton(context, ZefyrToolbarAction.close));
+    // }
     return new Container(
-      constraints: constraints,
-      child: Material(color: theme.color, child: Row(children: children)),
+      //constraints: constraints,
+      child: Material(color: theme.color, child: Wrap(children: children)),
     );
   }
 }
@@ -250,10 +249,8 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
     final toolbar = ZefyrToolbarScaffold(
       key: _toolbarKey,
       body: ZefyrButtonList(buttons: _buildButtons(context)),
-      trailing: buildButton(context, ZefyrToolbarAction.hideKeyboard),
+      //trailing: buildButton(context, ZefyrToolbarAction.hideKeyboard),
     );
-
-    layers.add(toolbar);
 
     if (hasOverlay) {
       Widget widget = new Builder(builder: _overlayBuilder);
@@ -266,14 +263,14 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
       layers.add(overlay);
     }
 
-    final constraints =
-        BoxConstraints.tightFor(height: ZefyrToolbar.kToolbarHeight);
+    layers.add(toolbar);
+
+
+    //final constraints =
+        //BoxConstraints.tightFor(height: ZefyrToolbar.kToolbarHeight);
     return _ZefyrToolbarScope(
       toolbar: this,
-      child: Container(
-        constraints: constraints,
-        child: Stack(children: layers),
-      ),
+      child: Column(children: layers),
     );
   }
 
@@ -283,15 +280,23 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
       buildButton(context, ZefyrToolbarAction.italic),
       buildButton(context, ZefyrToolbarAction.underline),
       buildButton(context, ZefyrToolbarAction.strikeThrough),
-      //LinkButton(),
-      AlignmentButton(),
       SizeButton(),
-      buildButton(context, ZefyrToolbarAction.headingLevel2),
-      buildButton(context, ZefyrToolbarAction.bulletList),
-      buildButton(context, ZefyrToolbarAction.numberList),
-      buildButton(context, ZefyrToolbarAction.checklist),
       buildButton(context, ZefyrToolbarAction.textColor),
       buildButton(context, ZefyrToolbarAction.backgroundColor),
+      buildButton(context, ZefyrToolbarAction.headingLevel2),
+      buildButton(context, ZefyrToolbarAction.textAlignLeft),
+      buildButton(context, ZefyrToolbarAction.textAlignCenter),
+      buildButton(context, ZefyrToolbarAction.textAlignRight),
+      buildButton(context, ZefyrToolbarAction.textAlignJustify),
+      // buildButton(context, ZefyrToolbarAction.sizeSmall),
+      // buildButton(context, ZefyrToolbarAction.sizeNormal),
+      // buildButton(context, ZefyrToolbarAction.sizeLarge),
+      // buildButton(context, ZefyrToolbarAction.sizeHuge),
+      //LinkButton(),
+      //AlignmentButton(),
+      buildButton(context, ZefyrToolbarAction.checklist),
+      buildButton(context, ZefyrToolbarAction.bulletList),
+      buildButton(context, ZefyrToolbarAction.numberList),
       // buildButton(context, ZefyrToolbarAction.quote),
       // buildButton(context, ZefyrToolbarAction.code),
       //buildButton(context, ZefyrToolbarAction.horizontalRule),
@@ -311,62 +316,48 @@ class ZefyrButtonList extends StatefulWidget {
 }
 
 class _ZefyrButtonListState extends State<ZefyrButtonList> {
-  final ScrollController _controller = new ScrollController();
+  //final ScrollController _controller = new ScrollController();
   bool _showLeftArrow = false;
   bool _showRightArrow = false;
 
   @override
   void initState() {
     super.initState();
-    _controller.addListener(_handleScroll);
+    //_controller.addListener(_handleScroll);
     // Workaround to allow scroll controller attach to our ListView so that
     // we can detect if overflow arrows need to be shown on init.
     // TODO: find a better way to detect overflow
-    Timer.run(_handleScroll);
+    //Timer.run(_handleScroll);
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = ZefyrTheme.of(context).toolbarTheme;
-    final color = theme.iconColor;
-    final list = ListView(
-      scrollDirection: Axis.horizontal,
-      controller: _controller,
+    final list = Wrap(
+      spacing: -15.0,
+      // scrollDirection: Axis.vertical,
+      //controller: _controller,
       children: widget.buttons,
-      physics: ClampingScrollPhysics(),
+      // physics: ClampingScrollPhysics(),
     );
 
-    final leftArrow = _showLeftArrow
-        ? Icon(Icons.arrow_left, size: 18.0, color: color)
-        : null;
-    final rightArrow = _showRightArrow
-        ? Icon(Icons.arrow_right, size: 18.0, color: color)
-        : null;
-    return Row(
-      children: <Widget>[
-        SizedBox(
-          width: 12.0,
-          height: ZefyrToolbar.kToolbarHeight,
-          child: Container(child: leftArrow, color: theme.color),
-        ),
-        Expanded(child: ClipRect(child: list)),
-        SizedBox(
-          width: 12.0,
-          height: ZefyrToolbar.kToolbarHeight,
-          child: Container(child: rightArrow, color: theme.color),
-        ),
-      ],
-    );
+    // final leftArrow = _showLeftArrow
+    //     ? Icon(Icons.arrow_left, size: 18.0, color: color)
+    //     : null;
+    // final rightArrow = _showRightArrow
+    //     ? Icon(Icons.arrow_right, size: 18.0, color: color)
+    //     : null;
+    return list;
   }
 
-  void _handleScroll() {
-    setState(() {
-      _showLeftArrow =
-          _controller.position.minScrollExtent != _controller.position.pixels;
-      _showRightArrow =
-          _controller.position.maxScrollExtent != _controller.position.pixels;
-    });
-  }
+  // void _handleScroll() {
+  //   setState(() {
+  //     _showLeftArrow =
+  //         _controller.position.minScrollExtent != _controller.position.pixels;
+  //     _showRightArrow =
+  //         _controller.position.maxScrollExtent != _controller.position.pixels;
+  //   });
+  // }
 }
 
 class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
@@ -386,6 +377,7 @@ class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
     //ZefyrToolbarAction.headingLevel2: Icons.format_size,
     //ZefyrToolbarAction.clipboardCopy: Icons.content_copy,
     //ZefyrToolbarAction.openInBrowser: Icons.open_in_new,
+    //ZefyrToolbarAction.headingLevel2: Icons.format_size,
     ZefyrToolbarAction.bulletList: Icons.format_list_bulleted,
     ZefyrToolbarAction.numberList: Icons.format_list_numbered,
     ZefyrToolbarAction.checklist: Icons.check_circle,
@@ -397,29 +389,29 @@ class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
     // ZefyrToolbarAction.image: Icons.photo,
     // ZefyrToolbarAction.cameraImage: Icons.photo_camera,
     // ZefyrToolbarAction.galleryImage: Icons.photo_library,
-    ZefyrToolbarAction.hideKeyboard: Icons.keyboard_hide,
+    //ZefyrToolbarAction.hideKeyboard: Icons.keyboard_hide,
     ZefyrToolbarAction.close: Icons.close,
-    ZefyrToolbarAction.confirm: Icons.check,
+    //ZefyrToolbarAction.confirm: Icons.check,
   };
 
   static const kSpecialIconSizes = {
-    ZefyrToolbarAction.unlink: 20.0,
+    //ZefyrToolbarAction.unlink: 20.0,
     //ZefyrToolbarAction.clipboardCopy: 20.0,
     ZefyrToolbarAction.headingLevel2: 20.0,
-    ZefyrToolbarAction.sizeSmall: 30.0,
-    ZefyrToolbarAction.sizeNormal: 30.0,
-    ZefyrToolbarAction.sizeLarge: 30.0,
-    ZefyrToolbarAction.sizeHuge: 30.0,
+    ZefyrToolbarAction.sizeSmall: 40.0,
+    ZefyrToolbarAction.sizeNormal: 40.0,
+    ZefyrToolbarAction.sizeLarge: 40.0,
+    ZefyrToolbarAction.sizeHuge: 40.0,
     ZefyrToolbarAction.close: 20.0,
-    ZefyrToolbarAction.confirm: 20.0,
+    //ZefyrToolbarAction.confirm: 20.0,
   };
 
   static const kDefaultButtonTexts = {
     ZefyrToolbarAction.headingLevel2: 'H',
-    ZefyrToolbarAction.sizeSmall: 'small',
-    ZefyrToolbarAction.sizeNormal: 'normal',
-    ZefyrToolbarAction.sizeLarge: 'large',
-    ZefyrToolbarAction.sizeHuge: 'huge'
+    ZefyrToolbarAction.sizeSmall: 'Small',
+    ZefyrToolbarAction.sizeNormal: 'Normal',
+    ZefyrToolbarAction.sizeLarge: 'Large',
+    ZefyrToolbarAction.sizeHuge: 'Huge'
   };
 
   BuildContext editorConext;
