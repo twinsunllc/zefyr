@@ -28,6 +28,7 @@ class ZefyrEditor extends StatefulWidget {
     this.onCheckboxToggled,
     this.onSnooze,
     this.showCheckListDelete = false,
+    this.appToShowToolbar = true,
   }) : super(key: key);
 
   final ZefyrController controller;
@@ -40,6 +41,7 @@ class ZefyrEditor extends StatefulWidget {
   final VoidCallback onCheckboxToggled;
   final Function(DateTime, String, bool) onSnooze;
   final bool showCheckListDelete;
+  final bool appToShowToolbar;
 
   /// Padding around editable area.
   final EdgeInsets padding;
@@ -84,7 +86,7 @@ class _ZefyrEditorState extends State<ZefyrEditor> {
   void _handleChange() {
     if (_scope.focusOwner == FocusOwner.none) {
       hideToolbar();
-    } else if (!hasToolbar) {
+    } else if (!hasToolbar && widget.appToShowToolbar) {
       showToolbar();
     } else {
       // TODO: is there a nicer way to do this?
