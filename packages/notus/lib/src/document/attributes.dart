@@ -93,6 +93,7 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
     NotusAttribute.block.key: NotusAttribute.block,
     NotusAttribute.embed.key: NotusAttribute.embed,
     NotusAttribute.textColor.key: NotusAttribute.textColor,
+    NotusAttribute.indent.key: NotusAttribute.indent,
     NotusAttribute.backgroundColor.key: NotusAttribute.backgroundColor,
   };
 
@@ -115,6 +116,9 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
 
   /// Link style attribute.
   static const textColor = const _TextColorAttribute();
+
+  /// Link style attribute.
+  static const indent = const _IndentAttribute();
 
   /// Link style attribute.
   static const backgroundColor = const _BackgroundColorAttribute();
@@ -406,6 +410,11 @@ class _StrikeThroughAttribute extends NotusAttribute<bool> {
 /// Applies bold style to a text segment.
 class _TextColorAttribute extends NotusAttribute<String> {
   const _TextColorAttribute() : super._('text-color', NotusAttributeScope.inline, 'text-color');
+}
+
+/// Applies bold style to a text segment.
+class _IndentAttribute extends NotusAttribute<String> {
+  const _IndentAttribute() : super._('indent', NotusAttributeScope.line, 'indent');
 }
 
 /// Applies bold style to a text segment.

@@ -62,7 +62,7 @@ class _RawZefyrLineState extends State<RawZefyrLine> {
       content = ZefyrRichText(
         node: widget.node,
         text: buildText(context),
-        textAlign: (widget.textAlign == null) ? TextAlign.start : widget.textAlign,
+        textAlign: (widget.textAlign == null) ? TextAlign.center : widget.textAlign,
       );
     }
 

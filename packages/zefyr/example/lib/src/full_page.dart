@@ -49,7 +49,7 @@ class _FullPageEditorScreenState extends State<FullPageEditorScreen> {
   void initState() {
     super.initState();
     _sub = _controller.document.changes.listen((change) {
-      print('${change.source}: ${change.change}');
+      //print('${change.source}: ${change.change}');
     });
   }
 
@@ -105,7 +105,7 @@ class _FullPageEditorScreenState extends State<FullPageEditorScreen> {
 
   void _stopEditing() {
     setState(() {
-      print('DOCUMENT: ${_controller.document.toJson()}');
+      //print('DOCUMENT: ${_controller.document.toJson()}');
       _editing = false;
     });
   }

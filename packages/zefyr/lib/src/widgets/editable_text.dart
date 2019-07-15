@@ -197,9 +197,6 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
 
   Widget _defaultChildBuilder(BuildContext context, Node node) {
     if (node is LineNode) {
-      if (node.style.contains(NotusAttribute.textColor)) {
-        print('Contains Text Color');
-      }
       if (node.hasEmbed) {
         return new RawZefyrLine(node: node);
       } else if (node.style.contains(NotusAttribute.heading)) {

@@ -97,8 +97,6 @@ class ZefyrController extends ChangeNotifier {
 
   void replaceText(int index, int length, String text, {TextSelection selection}) {
 
-    print('index: ${index} length: ${length} text: ${text}');
-
     Delta delta;
 
     Map attributes = Map<String, dynamic>();
@@ -132,9 +130,7 @@ class ZefyrController extends ChangeNotifier {
     notifyListeners();
 
     if (delta != null) {
-      print('${delta.toJson().toString()}');
       for(var i = 0; i < delta.length; i++){
-        print('${delta.elementAt(i).data}');
         if(delta.elementAt(i).isDelete){
           _toggledAttributes.clear();
         }
@@ -146,7 +142,6 @@ class ZefyrController extends ChangeNotifier {
   }
 
   void formatText(int index, int length, NotusAttribute attribute) {
-    print('index: ${index} length: ${length} attribute: ${attribute.key}');
     final change = document.format(index, length, attribute);
     _lastChangeSource = ChangeSource.local;
     // Transform selection against the composed change and give priority to
