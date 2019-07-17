@@ -1,6 +1,7 @@
 // Copyright (c) 2018, the Zefyr project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zefyr/util.dart';
@@ -150,7 +151,7 @@ class InputConnectionController implements TextInputClient {
         exception: e,
         stack: trace,
         library: 'Zefyr',
-        context: 'while updating editing value',
+        context: TextNode(),
       ));
       rethrow;
     }
@@ -168,4 +169,27 @@ class InputConnectionController implements TextInputClient {
   void updateFloatingCursor(RawFloatingCursorPoint point) {
     // TODO: implement updateFloatingCursor
   }
+}
+
+class TextNode extends DiagnosticsNode {
+  @override
+  List<DiagnosticsNode> getChildren() {
+    // TODO: implement getChildren
+    return null;
+  }
+
+  @override
+  List<DiagnosticsNode> getProperties() {
+    // TODO: implement getProperties
+    return null;
+  }
+
+  @override
+  String toDescription({TextTreeConfiguration parentConfiguration}) {
+    // TODO: implement toDescription
+    return null;
+  }
+
+  @override
+  Object get value => 'while updating editing value';
 }

@@ -185,8 +185,15 @@ class RenderZefyrParagraph extends RenderParagraph implements RenderEditableBox 
   // Overridden members
   //
 
+  // @override
+  // void set text(TextSpan value) {
+  //   _prototypePainter.text = new TextSpan(text: '.', style: value.style);
+  //   _selectionRects = null;
+  //   super.text = value;
+  // }
+
   @override
-  void set text(TextSpan value) {
+  void set text(InlineSpan value) {
     _prototypePainter.text = new TextSpan(text: '.', style: value.style);
     _selectionRects = null;
     super.text = value;
