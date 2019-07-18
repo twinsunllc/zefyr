@@ -139,7 +139,7 @@ class ZefyrList extends StatelessWidget {
   int getIndentLevel(LineNode childNode) {
     if (childNode.style.contains(NotusAttribute.indent)) {
       NotusAttribute<String> attribute = childNode.style.get(NotusAttribute.indent);
-      print('INDENT!!! Level: ${attribute.value}');
+      //print('INDENT!!! Level: ${attribute.value}');
       return int.parse(attribute.value);
     }
     return 0;
