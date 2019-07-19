@@ -11,8 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
   collection: ^1.14.6
-  url_launcher: ^5.0.0
-  image_picker: ^0.5.0
+  #url_launcher: ^5.0.0
+  #image_picker: ^0.5.0
+  url_launcher: ^5.1.0
+  image_picker: ^0.6.0+17
   quill_delta: ^1.0.0-dev.1.0
   notus: 
     path: ../notus
