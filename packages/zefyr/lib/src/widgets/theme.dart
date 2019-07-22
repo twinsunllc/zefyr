@@ -82,15 +82,15 @@ class ZefyrThemeData {
       color: Colors.grey.shade800,
     );
     final padding = const EdgeInsets.only(bottom: 16.0);
-    final boldStyle = new TextStyle(fontWeight: FontWeight.bold);
-    final underlineStyle = new TextStyle(decoration: TextDecoration.underline);
-    final italicStyle = new TextStyle(fontStyle: FontStyle.italic);
+    final boldStyle = const TextStyle(fontWeight: FontWeight.bold);
+    final underlineStyle = const TextStyle(decoration: TextDecoration.underline);
+    final italicStyle = const TextStyle(fontStyle: FontStyle.italic);
     final strikeThroughStyle = paragraphStyle.copyWith(decoration: TextDecoration.lineThrough);
     final linkStyle =
         TextStyle(color: Colors.blue, decoration: TextDecoration.underline);
-    final smallSizeStyle = new TextStyle(fontSize: 13.0);
-    final largeSizeStyle = new TextStyle(fontSize: 24.0);
-    final hugeSizeStyle = new TextStyle(fontSize: 34.0);
+    final smallSizeStyle = const TextStyle(fontSize: 13.0);
+    final largeSizeStyle = const TextStyle(fontSize: 24.0);
+    final hugeSizeStyle = const TextStyle(fontSize: 34.0);
     final strikeThrough = paragraphStyle.copyWith(decoration: TextDecoration.lineThrough);
 
     return new ZefyrThemeData(

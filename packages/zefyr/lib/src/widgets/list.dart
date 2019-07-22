@@ -172,23 +172,32 @@ class ZefyrListItem extends StatelessWidget {
     Widget content;
     EdgeInsets padding;
 
-    if (node.style.contains(NotusAttribute.heading)) {
-      final headingTheme = ZefyrHeading.themeOf(node, context);
-      if (style != NotusAttribute.block.checklistChecked && style != NotusAttribute.block.checklistUnchecked) {
-        textStyle = headingTheme.textStyle;
-      } else {
-        textStyle = (!isChecked) ? headingTheme.textStyle : theme.strikeThrough;
-      }
-      padding = headingTheme.padding;
-      content = new ZefyrHeading(node: node, textAlign: textAlign,);
+    //INCLUDES ALLOWING HEADERS In LISTS
+    // if (node.style.contains(NotusAttribute.heading)) {
+    //   final headingTheme = ZefyrHeading.themeOf(node, context);
+    //   if (style != NotusAttribute.block.checklistChecked && style != NotusAttribute.block.checklistUnchecked) {
+    //     textStyle = headingTheme.textStyle;
+    //   } else {
+    //     textStyle = (!isChecked) ? headingTheme.textStyle : theme.strikeThrough;
+    //   }
+    //   padding = headingTheme.padding;
+    //   content = new ZefyrHeading(node: node, textAlign: textAlign,);
+    // } else {
+    //   if (style != NotusAttribute.block.checklistChecked && style != NotusAttribute.block.checklistUnchecked) {
+    //     textStyle = theme.paragraphTheme.textStyle;
+    //   } else {
+    //     textStyle = (!isChecked) ? theme.paragraphTheme.textStyle : theme.strikeThrough;
+    //   }
+    //   content = new RawZefyrLine(node: node, style: textStyle, textAlign: textAlign);
+    // }
+
+    //Only allow non header for lists
+    if (style != NotusAttribute.block.checklistChecked && style != NotusAttribute.block.checklistUnchecked) {
+      textStyle = theme.paragraphTheme.textStyle;
     } else {
-      if (style != NotusAttribute.block.checklistChecked && style != NotusAttribute.block.checklistUnchecked) {
-        textStyle = theme.paragraphTheme.textStyle;
-      } else {
-        textStyle = (!isChecked) ? theme.paragraphTheme.textStyle : theme.strikeThrough;
-      }
-      content = new RawZefyrLine(node: node, style: textStyle, textAlign: textAlign);
+      textStyle = (!isChecked) ? theme.paragraphTheme.textStyle : theme.strikeThrough;
     }
+    content = new RawZefyrLine(node: node, style: textStyle, textAlign: textAlign);
 
     Widget bullet = (style != NotusAttribute.block.checklistChecked && style != NotusAttribute.block.checklistUnchecked) ?
         SizedBox(width: 18.0, child: Text(bulletText, style: textStyle)) :

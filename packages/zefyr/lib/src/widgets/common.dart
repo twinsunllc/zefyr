@@ -176,7 +176,8 @@ class _RawZefyrLineState extends State<RawZefyrLine> {
     if (style.contains(NotusAttribute.backgroundColor)) {
       NotusAttribute<String> attribute = style.get(NotusAttribute.backgroundColor);
       if (attribute != null && attribute.value != null) {
-        result = result.merge(new TextStyle(background: Paint()..color = _getColorFromValue(attribute.value)));
+        //result = result.merge(new TextStyle(background: Paint()..color = _getColorFromValue(attribute.value)));
+        result = result.copyWith(backgroundColor: _getColorFromValue(attribute.value));
       }
     }
     return result;

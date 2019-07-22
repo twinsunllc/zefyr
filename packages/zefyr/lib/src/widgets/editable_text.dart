@@ -310,7 +310,9 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
       requestKeyboard();
     }
     _input.updateRemoteValue(widget.controller.plainTextEditingValue);
-    _cursorTimer.startOrStop(focusNode, selection);
+    //_cursorTimer.startOrStop(focusNode, selection);
+    _cursorTimer.stop();
+    _cursorTimer.start();
     setState(() {
       // nothing to update internally.
     });

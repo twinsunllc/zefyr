@@ -374,7 +374,7 @@ class _SelectionHandleDriverState extends State<SelectionHandleDriver> {
       );
       handle = new CompositedTransformFollower(
         link: block.layerLink,
-        showWhenUnlinked: false,
+        showWhenUnlinked: true,
         child: new Stack(
           overflow: Overflow.visible,
           children: <Widget>[handle],
