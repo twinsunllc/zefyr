@@ -401,6 +401,7 @@ class _SizeButtonState extends State<SizeButton> {
     final buttons = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
+      //mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         toolbar.buildButton(context, ZefyrToolbarAction.sizeSmall),
         SizedBox(width: 10.0,),
