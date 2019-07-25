@@ -91,11 +91,13 @@ class ZefyrToolbarScaffold extends StatelessWidget {
     @required this.body,
     this.trailing,
     this.autoImplyTrailing: true,
+    this.shrinkToolbar: false,
   }) : super(key: key);
 
   final Widget body;
   final Widget trailing;
   final bool autoImplyTrailing;
+  final bool shrinkToolbar;
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +106,10 @@ class ZefyrToolbarScaffold extends StatelessWidget {
     final constraints =
         BoxConstraints.tightFor(height: ZefyrToolbar.kToolbarHeight);
     final children = <Widget>[
-      body,
+      (shrinkToolbar) ?
+      Expanded(
+        child: body,
+      ): body,
     ];
 
     if (trailing != null) {
@@ -113,16 +118,21 @@ class ZefyrToolbarScaffold extends StatelessWidget {
     // else if (autoImplyTrailing) {
     //   children.add(toolbar.buildButton(context, ZefyrToolbarAction.close));
     // }
+    if (!shrinkToolbar) {
+      return new Container(
+        child: Material(color: theme.color, child: Wrap(children: children)),
+      );
+    }
     return new Container(
-      //constraints: constraints,
-      child: Material(color: theme.color, child: Wrap(children: children)),
+      constraints: constraints,
+      child: Material(color: theme.color, child: Row(children: children)),
     );
   }
 }
 
 /// Toolbar for [ZefyrEditor].
 class ZefyrToolbar extends StatefulWidget implements PreferredSizeWidget {
-  static const kToolbarHeight = 50.0;
+  static const kToolbarHeight = 30.0;
 
   const ZefyrToolbar({
     Key key,
@@ -130,11 +140,13 @@ class ZefyrToolbar extends StatefulWidget implements PreferredSizeWidget {
     this.autoHide: true,
     this.delegate,
     this.editorContext,
+    this.shrinkToolbar = false,
   }) : super(key: key);
 
   final ZefyrToolbarDelegate delegate;
   final ZefyrScope editor;
   final BuildContext editorContext;
+  final bool shrinkToolbar;
 
   /// Whether to automatically hide this toolbar when editor loses focus.
   final bool autoHide;
@@ -248,7 +260,12 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
     // new state each time we toggle overlay.
     final toolbar = ZefyrToolbarScaffold(
       key: _toolbarKey,
-      body: ZefyrButtonList(buttons: _buildButtons(context)),
+      shrinkToolbar: widget.shrinkToolbar,
+      body: Container(child: ZefyrButtonList(buttons: _buildButtons(context), shrinkToolbar: widget.shrinkToolbar,), decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(width: 1.0, color: Colors.grey[500])
+        )
+      ),),
       //trailing: buildButton(context, ZefyrToolbarAction.hideKeyboard),
     );
 
@@ -266,11 +283,14 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
     layers.add(toolbar);
 
 
-    //final constraints =
-        //BoxConstraints.tightFor(height: ZefyrToolbar.kToolbarHeight);
+    final constraints =
+        BoxConstraints.tightFor(height: ZefyrToolbar.kToolbarHeight);
     return _ZefyrToolbarScope(
       toolbar: this,
-      child: Column(children: layers),
+        child: (widget.shrinkToolbar) ? Container(
+          constraints: constraints,
+          child: Stack(children: layers),
+        ) : Column(children: layers),
     );
   }
 
@@ -308,22 +328,21 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
 
 /// Scrollable list of toolbar buttons.
 class ZefyrButtonList extends StatefulWidget {
-  const ZefyrButtonList({Key key, @required this.buttons}) : super(key: key);
+  const ZefyrButtonList({Key key, @required this.buttons, this.shrinkToolbar = false}) : super(key: key);
   final List<Widget> buttons;
+  final bool shrinkToolbar;
 
   @override
   _ZefyrButtonListState createState() => _ZefyrButtonListState();
 }
 
 class _ZefyrButtonListState extends State<ZefyrButtonList> {
-  //final ScrollController _controller = new ScrollController();
-  bool _showLeftArrow = false;
-  bool _showRightArrow = false;
+  final ScrollController _controller = new ScrollController();
 
   @override
   void initState() {
     super.initState();
-    //_controller.addListener(_handleScroll);
+   // _controller.addListener(_handleScroll);
     // Workaround to allow scroll controller attach to our ListView so that
     // we can detect if overflow arrows need to be shown on init.
     // TODO: find a better way to detect overflow
@@ -333,20 +352,16 @@ class _ZefyrButtonListState extends State<ZefyrButtonList> {
   @override
   Widget build(BuildContext context) {
     final theme = ZefyrTheme.of(context).toolbarTheme;
-    final list = Wrap(
-      spacing: -15.0,
-      // scrollDirection: Axis.vertical,
-      //controller: _controller,
+    final list = (widget.shrinkToolbar) ?
+    ListView(
+      scrollDirection: Axis.horizontal,
+      controller: _controller,
       children: widget.buttons,
-      // physics: ClampingScrollPhysics(),
-    );
-
-    // final leftArrow = _showLeftArrow
-    //     ? Icon(Icons.arrow_left, size: 18.0, color: color)
-    //     : null;
-    // final rightArrow = _showRightArrow
-    //     ? Icon(Icons.arrow_right, size: 18.0, color: color)
-    //     : null;
+      physics: ClampingScrollPhysics(),
+    ) : Wrap(
+        spacing: -15.0,
+        children: widget.buttons,
+      );
     return list;
   }
 

@@ -29,6 +29,7 @@ class ZefyrEditor extends StatefulWidget {
     this.onSnooze,
     this.showCheckListDelete = false,
     this.appToShowToolbar = true,
+    this.shrinkToolbar = false,
   }) : super(key: key);
 
   final ZefyrController controller;
@@ -42,6 +43,7 @@ class ZefyrEditor extends StatefulWidget {
   final Function(DateTime, String, bool) onSnooze;
   final bool showCheckListDelete;
   final bool appToShowToolbar;
+  final bool shrinkToolbar;
 
   /// Padding around editable area.
   final EdgeInsets padding;
@@ -79,6 +81,7 @@ class _ZefyrEditorState extends State<ZefyrEditor> {
         editor: _scope,
         delegate: widget.toolbarDelegate,
         editorContext: context,
+        shrinkToolbar: widget.shrinkToolbar,
       ),
     );
   }

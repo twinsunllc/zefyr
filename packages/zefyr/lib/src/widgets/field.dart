@@ -23,6 +23,7 @@ class ZefyrField extends StatefulWidget {
   final Function(DateTime, String, bool) onSnooze;
   final bool showCheckListDelete;
   final bool appShowToolBar;
+  final bool shrinkToolBar;
 
   const ZefyrField({
     Key key,
@@ -39,6 +40,7 @@ class ZefyrField extends StatefulWidget {
     this.onSnooze,
     this.showCheckListDelete = false,
     this.appShowToolBar = false,
+    this.shrinkToolBar = false,
   }) : super(key: key);
 
   @override
@@ -61,6 +63,7 @@ class _ZefyrFieldState extends State<ZefyrField> {
       onSnooze: widget.onSnooze,
       showCheckListDelete: widget.showCheckListDelete,
       appToShowToolbar: widget.appShowToolBar,
+      shrinkToolbar: widget.shrinkToolBar,
     );
 
     if (widget.height != null) {

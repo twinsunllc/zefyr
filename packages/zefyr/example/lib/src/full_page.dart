@@ -91,6 +91,7 @@ class _FullPageEditorScreenState extends State<FullPageEditorScreen> {
             focusNode: _focusNode,
             enabled: _editing,
             imageDelegate: new CustomImageDelegate(),
+            shrinkToolbar: true,
           ),
         ),
       ),

@@ -380,6 +380,8 @@ class SizeButton extends StatefulWidget {
 }
 
 class _SizeButtonState extends State<SizeButton> {
+
+  @override
   Widget build(BuildContext context) {
     final toolbar = ZefyrToolbar.of(context);
     return toolbar.buildButton(

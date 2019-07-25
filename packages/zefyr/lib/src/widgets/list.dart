@@ -200,7 +200,8 @@ class ZefyrListItem extends StatelessWidget {
     content = new RawZefyrLine(node: node, style: textStyle, textAlign: textAlign);
 
     Widget bullet = (style != NotusAttribute.block.checklistChecked && style != NotusAttribute.block.checklistUnchecked) ?
-        SizedBox(width: 18.0, child: Text(bulletText, style: textStyle)) :
+        SizedBox(width: 18.0, child: (bulletText == '•') ? Container(padding: EdgeInsets.only(top: 8.0), child: Icon(Icons.brightness_1, size: 10.0,)) : Text(bulletText, style: textStyle,)) :
+        //Text(bulletText, style: (bulletText == '•') ? textStyle.copyWith(fontWeight: FontWeight.w900, fontSize: 20.0, height: 1.0) : textStyle)) :
         SizedBox(width: 28.0, child: Padding(
           padding: const EdgeInsets.only(right: 2.0),
           child: ChecklistItemBox(isChecked: isChecked, onToggle: () {

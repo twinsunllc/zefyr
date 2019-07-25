@@ -85,13 +85,13 @@ class ZefyrThemeData {
     final boldStyle = const TextStyle(fontWeight: FontWeight.bold);
     final underlineStyle = const TextStyle(decoration: TextDecoration.underline);
     final italicStyle = const TextStyle(fontStyle: FontStyle.italic);
-    final strikeThroughStyle = paragraphStyle.copyWith(decoration: TextDecoration.lineThrough);
+    final strikeThroughStyle = const TextStyle(decoration: TextDecoration.lineThrough);
     final linkStyle =
         TextStyle(color: Colors.blue, decoration: TextDecoration.underline);
     final smallSizeStyle = const TextStyle(fontSize: 13.0);
     final largeSizeStyle = const TextStyle(fontSize: 24.0);
     final hugeSizeStyle = const TextStyle(fontSize: 34.0);
-    final strikeThrough = paragraphStyle.copyWith(decoration: TextDecoration.lineThrough);
+    final strikeThrough = const TextStyle(decoration: TextDecoration.lineThrough);
 
     return new ZefyrThemeData(
       boldStyle: boldStyle,
