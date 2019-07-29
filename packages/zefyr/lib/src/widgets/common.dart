@@ -152,6 +152,12 @@ class _RawZefyrLineState extends State<RawZefyrLine> {
     if (style.containsSame(NotusAttribute.strikeThrough)) {
       result = result.merge(theme.strikeThroughStyle);
     }
+    if (style.containsSame(NotusAttribute.strikeThrough)) {
+      result = result.merge(theme.strikeThroughStyle);
+    }
+    if (style.containsSame(NotusAttribute.underline) && style.containsSame(NotusAttribute.strikeThrough)) {
+      result = result.merge(new TextStyle(decoration: TextDecoration.combine([TextDecoration.underline, TextDecoration.lineThrough])));
+    }
     if (style.contains(NotusAttribute.link)) {
       result = result.merge(theme.linkStyle);
     }

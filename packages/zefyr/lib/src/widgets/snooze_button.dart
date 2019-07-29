@@ -22,7 +22,7 @@ class SnoozeButton extends StatelessWidget {
                 lastDate: DateTime(2030),
                 builder: (BuildContext context, Widget child) {
                   return Theme(
-                    data: ThemeData.dark(),
+                    data: ThemeData.light().copyWith(primaryColor: Colors.grey[600], accentColor: Colors.grey[600]),
                     child: child,
                   );
                 },

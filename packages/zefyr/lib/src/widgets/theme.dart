@@ -86,6 +86,7 @@ class ZefyrThemeData {
     final underlineStyle = const TextStyle(decoration: TextDecoration.underline);
     final italicStyle = const TextStyle(fontStyle: FontStyle.italic);
     final strikeThroughStyle = const TextStyle(decoration: TextDecoration.lineThrough);
+    final underlineStrikeThrough = new TextStyle(decoration: TextDecoration.combine([TextDecoration.underline, TextDecoration.lineThrough]));
     final linkStyle =
         TextStyle(color: Colors.blue, decoration: TextDecoration.underline);
     final smallSizeStyle = const TextStyle(fontSize: 13.0);
